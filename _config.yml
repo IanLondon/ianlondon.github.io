@@ -1,8 +1,8 @@
 # Site wide configuration
 
-title:            Site Title
+title:            Ian London's Blog
 locale:           en_US
-url:
+url: //ianlondon.github.io
 
 
 # Jekyll configuration
@@ -41,13 +41,13 @@ titlecase: true
 
 # Site owner
 owner:
-  name: Your Name
+  name: Ian London
   avatar: bio-photo.jpg
-  bio: "Describe your self."
-  email:
+  bio: "Data scientist at Metis, NYC."
+  email: ianlondondu@gmail.com
   disqus-shortname:
-  twitter: #username
-  facebook: #username
+  twitter: ItsIanLondon
+  facebook: ian-ian-x
   google:
     plus: #username
     analytics:
@@ -55,9 +55,9 @@ owner:
     ad-client:
     ad-slot:
   bing-verify:
-  github: #username
+  github: IanLondon
   stackoverflow: #123456/username   from a "http://stackoverflow.com/users/123456/username" link
-  linkedin: #username
+  linkedin: ianlondon
   xing: #username
   instagram: #username
   lastfm: #username
