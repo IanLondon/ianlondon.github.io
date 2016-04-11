@@ -7,3 +7,5 @@ codekit-config.json
 node_modules
 _asset_bundler_cache
 .jekyll-metadata
+# dev
+_config.yml
