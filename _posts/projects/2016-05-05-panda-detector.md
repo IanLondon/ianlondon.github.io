@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Giant Panda Detector: Image Classification with SIFT Features
+title: Giant Panda Detector - Image Classification with SIFT Features
 modified:
 categories: projects/
 excerpt:
