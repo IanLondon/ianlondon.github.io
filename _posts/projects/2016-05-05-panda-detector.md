@@ -7,7 +7,7 @@ excerpt:
 tags: [opencv, SIFT, image classification, flask]
 image:
   feature:
-date: 2016-05-05T18:42:00-00:00
+date: 2016-05-05T11:42:00-00:00
 ---
 
 Details to come.
