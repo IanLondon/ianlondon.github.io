@@ -208,7 +208,7 @@ The Difference of Gaussians (DoG) is easy to do in Photoshop/GIMP. First greysca
 
 I did this with my stereo octopus image. Here are a few DoG results:
 
-<style>.gauss {height: 20px;}</style>
+<style>.gauss {height: 400px;}</style>
 
 #### sigmas: 10, 5
 <img src='../../images/octopus_gauss_10_5.jpg' class='gauss'>
@@ -375,9 +375,3 @@ plt.imshow(octo_front_desc[0].reshape(16,8), interpolation='none');
 
 
 ![png](../../images/oct_output_15_0.png)
-
-
-
-```
-
-```
