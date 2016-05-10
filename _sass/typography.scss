@@ -130,16 +130,18 @@ blockquote {
    Paragraphs
    ========================================================================== */
 
-p {
-	margin: 0 0 $indent-var;
-	// sibling indentation
-  @if $paragraph-indent == true {
-    & + p {
-			text-indent: $indent-var;
-			margin-top: -($indent-var);
-		}
-	}
-}
+// I don't like the indentation, I want non-indented newlines!
+
+// p {
+// 	margin: 0 0 $indent-var;
+// 	// sibling indentation
+//   @if $paragraph-indent == true {
+//     & + p {
+// 			text-indent: $indent-var;
+// 			margin-top: -($indent-var);
+// 		}
+// 	}
+// }
 
 /*
    Code snippets
