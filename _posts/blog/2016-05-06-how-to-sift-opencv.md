@@ -2,7 +2,7 @@
 layout: post
 title: VBoW Pt 1 - Image Classification in Python with SIFT Features
 modified:
-categories: projects/
+categories: blog/
 excerpt:
 tags: [opencv, SIFT, image classification, HOG]
 image:
