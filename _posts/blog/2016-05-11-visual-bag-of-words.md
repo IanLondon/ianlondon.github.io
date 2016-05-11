@@ -27,7 +27,7 @@ On many documents we can do an exact match for words, because modern English spe
 
 *Excerpt:*
 
-```
+``` text
 The coper teyne, noght knowing this preest,
 And hidde it, and him hente by the breest,
 And to him spak, and thus seyde in his game,
@@ -36,7 +36,7 @@ Helpeth me now, as I dide yow whyl-er,
 Putte in your hand, and loketh what is ther.'
 ```
 
-<img src='../../images/canterbury.jpg'></img>
+<img src='../../images/canterbury.jpg'>
 
 If we have a bunch of documents in Middle English and make a histogram of the whole corpus, we'll count `hirselve`, `hirsilf`, and `hyreself` as totally different words. It will be hard to figure out which documents are talking about women. Because spelling variation is such a big issue, we need some way to **cluster** all the variants of a word together so that they wind up in the same bin.
 
