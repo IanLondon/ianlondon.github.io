@@ -48,7 +48,13 @@ These visual words have spelling variations, just like Middle English, so we hav
 
 However, SIFT features are not so literal as "octopus eye", they tend to represent something more like "bright blob which gradually blends into darkish blob with a diagonal oblong midtone blob". We can't bin them together based on some human-meaningful definition. But we can bin them together mathematically. SIFT descriptors are 128-dimensional vectors, so we can simply make a matrix with every SIFT descriptor in our training set as its own row, and 128 columns for each of the dimensions of the SIFT features. Plug that matrix to a clustering algorithm like KMeans, then get the descriptors clustered into K different codewords (ie, K different clusters, or K different bins).
 
-Next we go through each individual image, and assign all of its SIFT descriptors to the bin they belong in. All the "eye" SIFT descriptors will be converted from a 128-dimensional SIFT vector to a bin label like "eye" or "Bin number 4".  Finally we make a histogram for each image by summing the number of features for each codeword. For example, we might get a total of 41 eye features and 93 tentacle features for image number 1; 12 eye features and 243 tentacle features for image number 2, and so on.
+<img src='../../images/octo_vbow_bag.jpg'>
+
+Next we go through each individual image, and assign all of its SIFT descriptors to the bin they belong in. All the "eye" SIFT descriptors will be converted from a 128-dimensional SIFT vector to a bin label like "eye" or "Bin number 4".  Finally we make a histogram for each image by summing the number of features for each codeword. For example, with K=3, we might get a total of 1 eye feature, 3 tentacle features, and 5 tentacle sucker features for image number 1; a different distribution for image number 2, and so on. (Remember, this is just a metaphor: real SIFT feature clusters won't have such a human-meaningful definition.)
+
+<img src='../../images/octo_histogram.jpg'>
+
+<div style='text-align: center;'>Image 1 --> <code>[1, 3, 5]</code></div>
 
 At this point we have converted images with varying numbers of SIFT features into K features. We can feed the matrix of M observations and K features into a classifier like AdaBoost or SVC as our `X`, image labels as our `y`, and it ought to be able to predict image labels from images with some degree of accuracy.
 
