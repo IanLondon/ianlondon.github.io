@@ -12,6 +12,10 @@ date: 2016-05-06T11:42:00-00:00
 
 # Image Classification in Python with Visual Bag of Words (VBoW)
 
+[Part 1](../how-to-sift-opencv/)
+
+[Part 2](../visual-bag-of-words/)
+
 ## Part 1: Feature Generation with SIFT
 
 ### Why we need to generate features
@@ -39,7 +43,7 @@ Photographs of the same objects will also change scale depending on focal length
 
 ### Generating features with SIFT: Scale-Invariant Feature Transform
 
-We want features that correspond to "parts" of images, at a more holistic level than raw pixels. We want features that are not sensitive to changes in image resolution, scale, rotation, changes in illumination (eg, position of lights). The SIFT algorithm will do this. It's going to be a little complicated, so I'll start by showing you how to do it in Python with OpenCV first, then we can go into how it works.
+We want features that correspond to "parts" of images, at a more holistic level than raw pixels. We want features that are not sensitive to changes in image resolution, scale, rotation, changes in illumination (eg, position of lights). The SIFT algorithm will do this. It's going to be a little complicated, so I'll start by showing you how to do it in Python with OpenCV first, then we can go into how it works. In my <a href="../visual-bag-of-words">next post</a> I'll show you how to convert SIFT features to a format that can be passed directly into a Random Forest, SVM, or other machine learning classifier.
 
 #### Aside: installing OpenCV 3.1.0
 SIFT is a patented algorithm and isn't included in many distributions of OpenCV. Also, OpenCV's function names change drastically between versions, and old code breaks! It will save you a lot of pain if you're on the same version as me (v3.1.0) for this tutorial. And you'll need the "nonfree" modules to have SIFT.

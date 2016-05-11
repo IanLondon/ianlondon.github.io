@@ -12,6 +12,10 @@ date: 2016-05-11T11:42:00-00:00
 
 # Image Classification in Python with Visual Bag of Words (VBoW)
 
+[Part 1](../how-to-sift-opencv/)
+
+[Part 2](../visual-bag-of-words/)
+
 ## Part 2: The Visual Bag of Words Model
 
 ### What is a Bag of Words?
@@ -23,7 +27,6 @@ We make our corpus of all words from taking the set of all the words in the all 
 ### Non-standard words?
 
 On many documents we can do an exact match for words, because modern English spelling is pretty standardized. We always spell `herself` as `herself`. But if we take some Middle English from Chaucer's Canturbury Tales, we will find that `herself` is spelled <a href='http://sites.fas.harvard.edu/~chaucer/spelling.htm'>many ways:</a> hire-self,  herself, herselven, hireself, hireselve, hireselven, hirself, hirselve, hirselven, hirsilf, hyreself, and hyrself.
-`
 
 *Excerpt:*
 
@@ -42,7 +45,7 @@ If we have a bunch of documents in Middle English and make a histogram of the wh
 
 ### "Visual words"
 
-In the previous post I explained what SIFT descriptors are and how to generate them. If we think of every picture as a document of SIFT "words", we can extend the bag of words model to classify images instead of text documents. We might imagine that one SIFT descriptor "visual word" represents an octopus eye, another one represents a tentacle "suction cup", and so on.
+In the <a href="../how-to-sift-opencv/">previous post</a> I explained what SIFT descriptors are and how to generate them. If we think of every picture as a document of SIFT "words", we can extend the bag of words model to classify images instead of text documents. We might imagine that one SIFT descriptor "visual word" represents an octopus eye, another one represents a tentacle "suction cup", and so on.
 
 These visual words have spelling variations, just like Middle English, so we have to have some clustering method to bin together the words that represent the same thing. All the eye features should go to the same bin, all the tentacle suckers in their own bin. It's more intuitive to think of the bins as being **codewords** like "eye features" and "tentacle features".
 
