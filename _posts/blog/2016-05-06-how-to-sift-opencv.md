@@ -10,7 +10,7 @@ image:
 date: 2016-05-06T11:42:00-00:00
 ---
 
-# Image Classification in Python with with Visual Bag of Words (VBoW)
+# Image Classification in Python with Visual Bag of Words (VBoW)
 
 ## Part 1: Feature Generation with SIFT
 
