@@ -4,10 +4,10 @@ title: Web Scraping With XPath
 modified:
 categories: blog/
 excerpt:
-tags: []
+tags: [web scraping]
 image:
   feature:
-date: 2016-04-11T12:35:45-04:00
+date: 2016-04-11T10:35:45-00:00
 ---
 
 XPath is very powerful, it's kind of a query language like SQL but for XML documents, including HTML documents, so it is a natural fit for web scraping. A lot of people never learn it and use CSS selectors and regex, and have a really hard time scraping anything complicated.

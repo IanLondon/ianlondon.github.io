@@ -1,13 +1,13 @@
 ---
 layout: post
-title: Web Scraping: Discovering Hidden APIs
+title: Web Scraping - Discovering Hidden APIs
 modified:
 categories: blog/
 excerpt:
-tags: []
+tags: [web scraping]
 image:
   feature:
-date: 2016-07-15T10:00:00-00:00
+date: 2016-07-14T10:00:00-00:00
 ---
 
 I was trying to help someone with a web scraping task today, and stumbled upon an interesting technique to find hidden APIs to scrape data from certain websites. Some sites use frontend frameworks which render dynamic content by loading a JSON or XML file from their backend to populate the user-facing site. I'm going to show you how to find the URL to access that dynamic content so you can easily scrape data from a site, without `lxml` or `BeautifulSoup` or CSS selectors or XPath. Just nice, simple JSON.
