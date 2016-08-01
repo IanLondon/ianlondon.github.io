@@ -7,7 +7,7 @@ excerpt:
 tags: [python, munging, cyclical, feature engineering]
 image:
   feature:
-date: 2016-07-30T01:00:00-00:00
+date: 2016-07-31T01:00:00-00:00
 ---
 
 Some data is inherently cyclical. Time is a rich example of this: minutes, hours, seconds, day of week, week of month, month, season, and so on all follow cycles. Ecological features like tide, astrological features like position in orbit, spatial features like rotation or longitude, visual features like color wheels are all naturally cyclical.
