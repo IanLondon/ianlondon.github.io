@@ -8,6 +8,7 @@ tags: [selenium]
 image:
   feature:
 date: 2016-04-11T12:35:45-04:00
+comments: true
 ---
 
 

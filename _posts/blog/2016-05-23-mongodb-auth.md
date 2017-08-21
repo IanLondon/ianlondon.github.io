@@ -8,6 +8,7 @@ tags: [mongodb, aws, server, unix]
 image:
   feature:
 date: 2016-05-23T11:42:00-00:00
+comments: true
 ---
 
 I have MongoDB running on my Ubuntu server in Amazon EC2. Since there's no simple all-in-one tutorial out there explaining how to set up user authentication for Mongo so that you can read and write to your MongoDB server from your laptop, I decided to write one.

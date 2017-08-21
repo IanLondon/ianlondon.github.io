@@ -8,6 +8,7 @@ tags: [docker, flask, nginx, ec2, app]
 image:
   feature:
 date: 2016-10-01T01:00:00-00:00
+comments: true
 ---
 
 # Why use Apache or Nginx for Flask?

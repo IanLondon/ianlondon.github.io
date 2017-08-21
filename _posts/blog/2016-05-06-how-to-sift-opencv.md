@@ -8,6 +8,7 @@ tags: [opencv, SIFT, image classification, HOG]
 image:
   feature:
 date: 2016-05-06T11:42:00-00:00
+comments: true
 ---
 
 # Image Classification in Python with Visual Bag of Words (VBoW)

@@ -8,6 +8,7 @@ tags: [basics, pickle]
 image:
   feature:
 date: 2016-04-14T21:45:45-00:00
+comments: true
 ---
 
 You just ran through a time-consuming process to load a bunch of data into a python object. Maybe you scraped data from thousands of websites. Maybe you computed a zillion digits of pi. If your laptop battery dies or if python crashes, your information will be lost.

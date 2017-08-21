@@ -8,6 +8,7 @@ tags: [python, pandas, munging]
 image:
   feature:
 date: 2016-07-15T11:42:00-00:00
+comments: true
 ---
 
 Data munging is the least sexiest part of <abbr title="Data Science">"the sexiest job of the 21st century"</abbr>. According to authoritative popular sources like [@BigDataBorat](https://twitter.com/BigDataBorat), data scientists spend 80% of their time cleaning up data. So we need to be really good at it!
