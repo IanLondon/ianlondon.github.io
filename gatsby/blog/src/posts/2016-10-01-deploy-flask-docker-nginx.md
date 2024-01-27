@@ -7,6 +7,14 @@ tags: [docker, flask, nginx, ec2, app]
 title: Deploying Flask Apps Easily with Docker and Nginx
 ---
 
+# IMPORTANT NOTE!
+
+This is a tutorial intended for beginners who want to learn by messing around and DIY-ing, which is a great way to learn.
+
+However, this is **NOT SECURE** and **NOT MEANT FOR PRODUCTION**!
+
+It's fun though, and suitable for a hackathon or short-lived personal project where you just want to get something deployed in a manual way that gives you a lot of control.
+
 # Why use Apache or Nginx for Flask?
 
 You can simply configure your Flask app to run with the line `app.run(host="0.0.0.0", port=80)` at the end, and get your app running online without using Apache2 by just doing `python myapp.py`.

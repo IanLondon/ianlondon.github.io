@@ -5,13 +5,15 @@ import { StaticImage } from "gatsby-plugin-image";
 
 const ProfileSidebar: React.FC = () => (
   <aside className="basis-1/4 lg:px-12 lg:pt-4 relative">
-    <section className="sticky top-4">
-      <Link to="/">
-        <StaticImage
-          className="hidden lg:block rounded-full mb-4"
-          src="../images/icon.jpg"
-          alt="pixel art portrait"
-        />
+    <section className="sticky top-4 lg:p-0 p-4">
+      <Link to="/" className="block w-full">
+        <div className="m-auto w-32 lg:w-full">
+          <StaticImage
+            className="rounded-full mb-4"
+            src="../images/icon.jpg"
+            alt="pixel art portrait"
+          />
+        </div>
       </Link>
 
       <ul className="flex justify-between">
@@ -19,7 +21,7 @@ const ProfileSidebar: React.FC = () => (
           <ExternalLink href="mailto:ianlondondu@gmail.com">Email</ExternalLink>
         </li>
         <li>
-          <ExternalLink href="https://linkedin.com/ianlondon">
+          <ExternalLink href="https://linkedin.com/in/ianlondon">
             LinkedIn
           </ExternalLink>
         </li>

@@ -9,9 +9,9 @@ title: VBoW Pt 1 - Image Classification in Python with SIFT Features
 
 # Image Classification in Python with Visual Bag of Words (VBoW)
 
-[Part 1](../how-to-sift-opencv/)
+[Part 1](../how-to-sift-opencv-vbow-part-1)
 
-[Part 2](../visual-bag-of-words/)
+[Part 2](../how-to-sift-opencv-vbow-part-2)
 
 ## Part 1: Feature Generation with SIFT
 
@@ -21,7 +21,7 @@ Raw pixel data is hard to use for machine learning, and for comparing images in 
 
 A digital image in its simplest form is just a matrix of pixel intensity values. Why not flatten this matrix to an array of pixel intensities and use that as your feature set for an image classifier? For simple, curated images like the 20x20 pixel [MNIST digit dataset](http://yann.lecun.com/exdb/mnist/), the raw pixel method can lead to a successful machine learning model. Each image has already been centered in the frame, and all the images have the same aspect ratio and same number of pixels.
 
-<img src='http://joshmontague.com/images/mnist-2.png' style="width: 50px;">
+![handwritten number 2](../images/mnist-2.png)
 
 But what about images that are less simple and less curated?
 

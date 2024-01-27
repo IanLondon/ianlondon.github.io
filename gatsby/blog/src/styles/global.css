@@ -74,7 +74,7 @@
 }
 /* Blockquotes */
 .markdown blockquote {
-  @apply p-2 mx-6 bg-amber-200 mb-4 border-l-4 border-amber-400 italic;
+  @apply p-2 mx-6 bg-amber-900 mb-4 border-l-4 border-amber-400 italic;
 }
 .markdown blockquote > p {
   @apply mb-0;
@@ -85,7 +85,7 @@
   @apply px-2 py-1 border border-amber-400;
 }
 .markdown tr:nth-child(odd) {
-  @apply bg-amber-100;
+  @apply bg-amber-800;
 }
 .markdown table {
   @apply mb-6;
@@ -97,4 +97,8 @@
   */
 .markdown :not(pre) > code.language-text {
   white-space: pre-line;
+}
+
+.markdown code {
+  @apply text-yellow-300;
 }

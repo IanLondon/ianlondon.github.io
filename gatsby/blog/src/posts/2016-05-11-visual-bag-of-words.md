@@ -9,9 +9,9 @@ title: VBoW Pt 2 - Image Classification in Python with Visual Bag of Words (VBoW
 
 # Image Classification in Python with Visual Bag of Words (VBoW)
 
-[Part 1](../how-to-sift-opencv/)
+[Part 1](../how-to-sift-opencv-vbow-part-1)
 
-[Part 2](../visual-bag-of-words/)
+[Part 2](../how-to-sift-opencv-vbow-part-2)
 
 ## Part 2: The Visual Bag of Words Model
 
@@ -27,32 +27,30 @@ On many documents we can do an exact match for words, because modern English spe
 
 _Excerpt:_
 
-```text
-The coper teyne, noght knowing this preest,
-And hidde it, and him hente by the breest,
-And to him spak, and thus seyde in his game,
-'Stoupeth adoun, by god, ye be to blame,
-Helpeth me now, as I dide yow whyl-er,
-Putte in your hand, and loketh what is ther.'
-```
+> The coper teyne, noght knowing this preest,  
+> And hidde it, and him hente by the breest,  
+> And to him spak, and thus seyde in his game,  
+> 'Stoupeth adoun, by god, ye be to blame,  
+> Helpeth me now, as I dide yow whyl-er,  
+> Putte in your hand, and loketh what is ther.
 
-<img src='../images/canterbury.jpg'>
+![Illuminated manuscript](../images/canterbury.jpg)
 
 If we have a bunch of documents in Middle English and make a histogram of the whole corpus, we'll count `hirselve`, `hirsilf`, and `hyreself` as totally different words. It will be hard to figure out which documents are talking about women. Because spelling variation is such a big issue, we need some way to **cluster** all the variants of a word together so that they wind up in the same bin.
 
 ### "Visual words"
 
-In the <a href="../how-to-sift-opencv/">previous post</a> I explained what SIFT descriptors are and how to generate them. If we think of every picture as a document of SIFT "words", we can extend the bag of words model to classify images instead of text documents. We might imagine that one SIFT descriptor "visual word" represents an octopus eye, another one represents a tentacle "suction cup", and so on.
+In the [previous post](../how-to-sift-opencv-vbow-part-1) I explained what SIFT descriptors are and how to generate them. If we think of every picture as a document of SIFT "words", we can extend the bag of words model to classify images instead of text documents. We might imagine that one SIFT descriptor "visual word" represents an octopus eye, another one represents a tentacle "suction cup", and so on.
 
 These visual words have spelling variations, just like Middle English, so we have to have some clustering method to bin together the words that represent the same thing. All the eye features should go to the same bin, all the tentacle suckers in their own bin. It's more intuitive to think of the bins as being **codewords** like "eye features" and "tentacle features".
 
 However, SIFT features are not so literal as "octopus eye", they tend to represent something more like "bright blob which gradually blends into darkish blob with a diagonal oblong midtone blob". We can't bin them together based on some human-meaningful definition. But we can bin them together mathematically. SIFT descriptors are 128-dimensional vectors, so we can simply make a matrix with every SIFT descriptor in our training set as its own row, and 128 columns for each of the dimensions of the SIFT features. Plug that matrix to a clustering algorithm like KMeans, then get the descriptors clustered into K different codewords (ie, K different clusters, or K different bins).
 
-<img src='../images/octo_vbow_bag.jpg'>
+![bag of visual words diagram](../images/octo_vbow_bag.jpg)
 
 Next we go through each individual image, and assign all of its SIFT descriptors to the bin they belong in. All the "eye" SIFT descriptors will be converted from a 128-dimensional SIFT vector to a bin label like "eye" or "Bin number 4". Finally we make a histogram for each image by summing the number of features for each codeword. For example, with K=3, we might get a total of 1 eye feature, 3 tentacle features, and 5 tentacle sucker features for image number 1; a different distribution for image number 2, and so on. (Remember, this is just a metaphor: real SIFT feature clusters won't have such a human-meaningful definition.)
 
-<img src='../images/octo_histogram.jpg'>
+![bag of visual words histogram](../images/octo_histogram.jpg)
 
 <div style='text-align: center;'>Image 1 --> <code>[1, 3, 5]</code></div>
 
