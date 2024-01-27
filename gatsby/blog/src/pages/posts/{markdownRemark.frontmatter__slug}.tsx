@@ -2,16 +2,8 @@ import * as React from "react";
 import { Link, PageProps, graphql } from "gatsby";
 import Page from "../../components/Page";
 import { GatsbyImage, StaticImage, getImage } from "gatsby-plugin-image";
-import { BlogPostFrontMatter } from "../../types";
 
 export { Head } from "../../components/Head";
-
-interface DataProps {
-  markdownRemark: {
-    html: string;
-    frontmatter: BlogPostFrontMatter;
-  };
-}
 
 // TODO alternative splash banner for posts vs home page.
 const DEFAULT_SPLASH_IMAGE = (
@@ -22,14 +14,26 @@ const DEFAULT_SPLASH_IMAGE = (
   />
 );
 
-export const BlogPostTemplate: React.FC<PageProps<DataProps>> = ({
+export const BlogPostTemplate: React.FC<
+  PageProps<Queries.SingleBlogPostQuery>
+> = ({
   data, // this prop will be injected by the GraphQL query below.
 }) => {
   const { markdownRemark } = data; // data.markdownRemark holds your post data
-  const { frontmatter, html } = markdownRemark;
-  console.log({ splash: frontmatter.splashImage });
+  // TODO: how to make graphqlTypegen correctly infer non-null fields?
+  if (
+    markdownRemark == null ||
+    markdownRemark.frontmatter == null ||
+    markdownRemark.html == null
+  ) {
+    console.error("missing data for AllBlogPostsQuery", markdownRemark);
+    return <Page>Post not found...</Page>;
+  }
 
-  const splashImage = getImage(frontmatter.splashImage || null);
+  const { frontmatter, html } = markdownRemark;
+
+  // TODO no 'any' here
+  const splashImage = getImage(frontmatter.splashImage as any);
 
   return (
     <Page>
@@ -43,9 +47,9 @@ export const BlogPostTemplate: React.FC<PageProps<DataProps>> = ({
         DEFAULT_SPLASH_IMAGE
       )}
 
-      <article className="p-3">
+      <article className="p-3 max-w-4xl m-auto">
         <h1 className="text-3xl">{frontmatter.title}</h1>
-        <p className="mb-4">{frontmatter.date.toLocaleString()}</p>
+        <p className="mb-4">{frontmatter.date}</p>
         <div className="markdown" dangerouslySetInnerHTML={{ __html: html }} />
       </article>
 
@@ -59,7 +63,7 @@ export const BlogPostTemplate: React.FC<PageProps<DataProps>> = ({
 };
 
 export const pageQuery = graphql`
-  query ($id: String!) {
+  query SingleBlogPost($id: String!) {
     markdownRemark(id: { eq: $id }) {
       html
       frontmatter {

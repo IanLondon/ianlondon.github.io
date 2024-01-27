@@ -1,8 +1,7 @@
 import * as React from "react";
-import { graphql, Link, type HeadFC, type PageProps } from "gatsby";
+import { graphql, type PageProps } from "gatsby";
 import BlogPostSummaryCard from "../components/BlogPostSummaryCard";
 import { StaticImage } from "gatsby-plugin-image";
-import ExternalLink from "../components/atoms/ExternalLink";
 import Page from "../components/Page";
 import ProfileSidebar from "../components/ProfileSidebar";
 
@@ -16,7 +15,9 @@ const SplashBanner = () => (
   />
 );
 
-const IndexPage: React.FC<PageProps<DataProps>> = ({ data }) => {
+const IndexPage: React.FC<PageProps<Queries.AllBlogPostsQuery>> = ({
+  data,
+}) => {
   const blogPosts = data.allMarkdownRemark.nodes;
 
   return (
@@ -26,12 +27,16 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({ data }) => {
       <section className="flex flex-col lg:flex-row">
         <ProfileSidebar />
 
-        <article className="w-full lg:basis-3/4 p-3">
+        <article className="w-full p-3 lg:basis-3/4 lg:m-auto lg:max-w-4xl">
           <h1 className="text-3xl">Posts</h1>
           {blogPosts.map((post) => (
             <BlogPostSummaryCard
               key={post.frontmatter.slug}
-              {...post.frontmatter}
+              date={post.frontmatter.date}
+              slug={post.frontmatter.slug}
+              title={post.frontmatter.title}
+              // TODO: auto-generate summary first N characters
+              summary={post.frontmatter.summary || ""}
             />
           ))}
         </article>
@@ -42,22 +47,11 @@ const IndexPage: React.FC<PageProps<DataProps>> = ({ data }) => {
 
 export default IndexPage;
 
-type DataProps = {
-  allMarkdownRemark: {
-    nodes: Array<{
-      frontmatter: {
-        date: Date;
-        slug: string;
-        title: string;
-        summary: string;
-      };
-    }>;
-  };
-};
-
 export const postsQuery = graphql`
-  query {
-    allMarkdownRemark {
+  query AllBlogPosts {
+    allMarkdownRemark(
+      sort: [{ frontmatter: { date: DESC } }, { frontmatter: { title: ASC } }]
+    ) {
       nodes {
         frontmatter {
           date(formatString: "MMMM DD, YYYY")

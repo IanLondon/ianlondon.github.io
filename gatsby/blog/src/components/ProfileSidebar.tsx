@@ -3,7 +3,7 @@ import ExternalLink from "./atoms/ExternalLink";
 import { StaticImage } from "gatsby-plugin-image";
 
 const ProfileSidebar: React.FC = () => (
-  <aside className="basis-1/4 lg:p-12">
+  <aside className="basis-1/4 lg:px-12 lg:pt-4">
     <section>
       <StaticImage
         className="hidden lg:block rounded-full mb-4"
