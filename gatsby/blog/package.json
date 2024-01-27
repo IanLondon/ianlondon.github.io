@@ -17,6 +17,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@deckdeckgo/highlight-code": "^3.6.0",
     "autoprefixer": "^10.4.17",
     "gatsby": "^5.13.2",
     "gatsby-plugin-image": "^3.13.1",
@@ -25,6 +26,7 @@
     "gatsby-plugin-postcss": "^6.13.1",
     "gatsby-plugin-sharp": "^5.13.1",
     "gatsby-plugin-sitemap": "^6.13.1",
+    "gatsby-remark-highlight-code": "^3.3.0",
     "gatsby-remark-images": "^7.13.1",
     "gatsby-source-filesystem": "^5.13.1",
     "gatsby-transformer-remark": "^6.13.1",

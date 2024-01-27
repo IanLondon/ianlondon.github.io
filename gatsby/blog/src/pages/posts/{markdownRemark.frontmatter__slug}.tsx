@@ -2,6 +2,7 @@ import * as React from "react";
 import { Link, PageProps, graphql } from "gatsby";
 import Page from "../../components/Page";
 import { GatsbyImage, StaticImage, getImage } from "gatsby-plugin-image";
+import ProfileSidebar from "../../components/ProfileSidebar";
 
 export { Head } from "../../components/Head";
 
@@ -47,11 +48,19 @@ export const BlogPostTemplate: React.FC<
         DEFAULT_SPLASH_IMAGE
       )}
 
-      <article className="p-3 max-w-4xl m-auto">
-        <h1 className="text-3xl">{frontmatter.title}</h1>
-        <p className="mb-4">{frontmatter.date}</p>
-        <div className="markdown" dangerouslySetInnerHTML={{ __html: html }} />
-      </article>
+      <section className="flex flex-col lg:flex-row">
+        <ProfileSidebar />
+
+        {/* <article className="p-3 max-w-4xl m-auto"> */}
+        <article className="w-full p-3 lg:basis-3/4 lg:m-auto lg:max-w-4xl">
+          <h1 className="text-3xl">{frontmatter.title}</h1>
+          <p className="mb-4">{frontmatter.date}</p>
+          <div
+            className="markdown"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        </article>
+      </section>
 
       <Link to="/">
         <p className="text-center w-full my-4 py-2 bg-amber-950 hover:bg-amber-900 hover:font-bold">

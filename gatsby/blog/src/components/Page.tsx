@@ -1,6 +1,8 @@
 import * as React from "react";
 import Footer from "./Footer";
-import Nav from "./Nav";
+import { defineCustomElements as deckDeckGoHighlightElement } from "@deckdeckgo/highlight-code/dist/loader";
+
+deckDeckGoHighlightElement();
 
 interface Props {
   children: React.ReactNode;
@@ -8,9 +10,7 @@ interface Props {
 
 const Page: React.FC<Props> = (props) => (
   <main>
-    <Nav />
     {props.children}
-
     <Footer />
   </main>
 );
