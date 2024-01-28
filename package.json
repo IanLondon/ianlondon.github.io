@@ -11,7 +11,7 @@
   "scripts": {
     "build": "gatsby build",
     "clean": "gatsby clean",
-    "deploy": "gatsby build && gh-pages -d public -b master",
+    "deploy": "gatsby build && gh-pages -d public -b main",
     "dev": "gatsby develop",
     "serve": "gatsby serve",
     "start": "gatsby develop",
