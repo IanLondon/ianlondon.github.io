@@ -31,6 +31,17 @@ const ProfileSidebar: React.FC = () => (
           </ExternalLink>
         </li>
       </ul>
+
+      <div className="w-full my-4">
+        <Link to="/rss.xml" className="mx-auto block w-20">
+          <StaticImage
+            src="../images/rss.png"
+            alt="rss icon"
+            className="w-6 inline-block mr-2"
+          />
+          <span>RSS</span>
+        </Link>
+      </div>
     </section>
   </aside>
 );

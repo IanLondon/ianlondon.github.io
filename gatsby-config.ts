@@ -2,16 +2,56 @@ import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: `Ian London's Projects Blog`,
+    title: "Ian London's Projects Blog",
     siteUrl: `https://ianlondon.github.io/`,
+    description: "A blog of software and other projects",
   },
-  // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
-  // If you use VSCode you can also use the GraphQL plugin
-  // Learn more at: https://gatsby.dev/graphql-typegen
   graphqlTypegen: true,
   plugins: [
-    "gatsby-plugin-postcss",
+    {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        feeds: [
+          {
+            serialize: (data: { query: Queries.AllBlogPostsQuery }) => {
+              const { allMarkdownRemark } = data.query;
+              return allMarkdownRemark.nodes.map((node) => {
+                // TODO: extract from metadata
+                const siteUrl = "https://ianlondon.github.io";
+                const pageUrl = `${siteUrl}/posts/${node.frontmatter.slug}`;
+                return Object.assign({}, node.frontmatter, {
+                  description: node.frontmatter.summary,
+                  date: node.frontmatter.date,
+                  url: pageUrl,
+                  guid: pageUrl,
+                  // custom_elements: [{ "content:encoded": node.html }],
+                });
+              });
+            },
+            query: `
+              {
+                allMarkdownRemark(
+                  sort: [{ frontmatter: { date: DESC } }, { frontmatter: { title: ASC } }]
+                ) {
+                  nodes {
+                    frontmatter {
+                      date
+                      slug
+                      title
+                      summary
+                    }
+                  }
+                }
+              }
+            `,
+            output: "/rss.xml",
+            title: "Ian London's Blog: RSS Feed",
+          },
+        ],
+      },
+    },
     "gatsby-plugin-image",
+    "gatsby-plugin-postcss",
     "gatsby-plugin-sitemap",
     {
       resolve: "gatsby-plugin-manifest",

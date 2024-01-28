@@ -21,6 +21,7 @@
     "@deckdeckgo/highlight-code": "^3.6.0",
     "autoprefixer": "^10.4.17",
     "gatsby": "^5.13.2",
+    "gatsby-plugin-feed": "^5.13.1",
     "gatsby-plugin-image": "^3.13.1",
     "gatsby-plugin-manifest": "^5.13.1",
     "gatsby-plugin-mdx": "^5.13.1",
