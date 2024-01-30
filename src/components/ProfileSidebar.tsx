@@ -2,6 +2,7 @@ import * as React from "react";
 import ExternalLink from "./atoms/ExternalLink";
 import { Link } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
+import RssLink from "./RssLink";
 
 const ProfileSidebar: React.FC = () => (
   <aside className="basis-1/4 lg:px-12 lg:pt-4 relative">
@@ -33,14 +34,7 @@ const ProfileSidebar: React.FC = () => (
       </ul>
 
       <div className="w-full my-4">
-        <Link to="/rss.xml" className="mx-auto block w-20">
-          <StaticImage
-            src="../images/rss.png"
-            alt="rss icon"
-            className="w-6 inline-block mr-2"
-          />
-          <span>RSS</span>
-        </Link>
+        <RssLink className="mx-auto block w-20" />
       </div>
     </section>
   </aside>
