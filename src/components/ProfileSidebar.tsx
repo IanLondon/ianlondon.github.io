@@ -19,7 +19,7 @@ const ProfileSidebar: React.FC = () => (
 
       <ul className="flex justify-between">
         <li>
-          <ExternalLink href="mailto:ianlondondu@gmail.com">Email</ExternalLink>
+          <ExternalLink href="mailto:ilondon5@proton.me">Email</ExternalLink>
         </li>
         <li>
           <ExternalLink href="https://linkedin.com/in/ianlondon">
