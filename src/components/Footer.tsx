@@ -10,7 +10,7 @@ const Footer: React.FC = () => (
       </span>
       <RssLink className="block mx-auto py-4 w-20" />
     </div>
-    <div className="pb-8">©{new Date().getFullYear()} Ian London</div>
+    <div className="pb-8">Ian London - {new Date().getFullYear()}</div>
   </footer>
 );
 
