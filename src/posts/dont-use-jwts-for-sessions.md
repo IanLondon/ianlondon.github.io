@@ -5,11 +5,14 @@ slug: dont-use-jwts-for-sessions
 tags: [jwts, soapbox, security]
 title: Please Don't Use JSON Web Tokens for Browser Sessions
 summary: Or, how I learned to love the session cookie
+splashImage: ../images/they-live-sunglasses.png
 ---
 
 # JSON Web Tokens
 
-In the JavaScript community, JSON Web Tokens (JWTs) have become a popular way to implement user authentication, especially for Single-Page Apps (SPAs). Session cookies are often portrayed as outdated, a 2000s internet technology. If you search around for beginner tutorials about "how to implement authentication in express", many posts imply that we all ditched old-fashioned session cookies when we moved from "traditional" web apps based on Rails, Django, etc to the new school of Vue, Angular, React, and the rest. Numerous blog tutorials claim that JWTs are "more secure", then proceed to describe an inherently insecure way to use them!
+In the JavaScript community, JSON Web Tokens (JWTs) generally stored in `localStorage` have become a popular way to implement user authentication, especially for Single-Page Apps (SPAs). That's the way I first learned when I picked up Express in 2016. In the 2010s when I learned Django I used Jinja templates and session cookies and SQL, and in the mid 2010s the new hotness was React Express Mongo and JWTs. Every resource on node/Express authentication recommended doing authentication this way, so I didn't question it for a long time.
+
+On StackOverflow and across the web dev tutorial-o-sphere, session cookies are often portrayed as outdated, a 2000s internet technology. If you search around for tutorials about "how to implement authentication in NodeJS", many posts imply that we all ditched old-fashioned session cookies when we moved from "traditional" web apps based on Rails, Django, etc to the new school of Vue, Angular, React, and the rest. Numerous blogs claim that JWTs are "more secure", then proceed to describe an inherently insecure way to use them!
 
 This is a mistake. JWTs are fantastic for their intended purpose: ["representing claims to be transferred between two parties."](https://datatracker.ietf.org/doc/html/rfc7519) That's why we use them in OpenID Connect (OIDC) to delegate authentication.
 
@@ -30,7 +33,7 @@ The articles I'm criticizing in this post talk about "JWTs versus cookies" becau
 
 _The browser is not a trusted client_. The browser is a dangerous landscape of end-user-installed browser plugins, and a lot of third-party JS scripts we invited in for analytics, ads, support chat, and so on, often at the behest of marketing/support teams. And on top of that, we have all the npm dependencies of our front-end JS code itself.
 
-If we put an authentication token in `localStorage`, XSS through flawed dependencies or other avenues could mean that every active session in our app gets owned quite trivially, and we are liable. It is a poor decision to store sensitive data like credentials anywhere accessible to JavaScript in the browser.
+If we put an authentication token in `localStorage`, XSS through flawed dependencies or other avenues could mean that every active session in our app gets exfiltrated quite trivially, and we are liable. It is a poor decision to store sensitive data like credentials anywhere accessible to JavaScript in the browser.
 
 Could we do some sort of **refresh token rotation** scheme in the browser to get around this? We could make the refresh token act as a one-time token. We could even invalidate the whole token chain if any refresh token is used a second time. That would incur significant costs of statefulness and complexity, but would it at least allow us to have JWTs that are accessible to JavaScript in a secure way, so they cannot be exfiltrated by XSS?
 
@@ -77,7 +80,7 @@ OAuth 2.0 is not meant for sessions between your one frontend browser applicatio
 
 In the olden times before OAuth, if I wanted to allow a social media app to access my email contacts, I had to give the social media app _my username and password to my email_ for it to log in as me and check my contexts. Obviously this is a security nightmare! The social media app has my full email login credentials (which I can only hope it's storing securely). It has the ability to read all my emails, send emails, even lock me out of my account by changing my password!! That's a huge risk to me the user, and a huge liability for the social media company.
 
-We needed a way to grant **limited access** to applications, and thus OAuth 1.0 and eventually 2.0 was born. OAuth allows applications to delegate limited access, so some app can read my contacts or do other limited actions in a way that is transparent to the user and revokable. (PS: [this short article about OAuth's history](https://oauth.net/about/introduction/) is a nice quick summary.)
+We needed a way to grant **limited access** to applications, and thus OAuth 1.0 and eventually 2.0 were born. OAuth allows applications to delegate limited access, so some app can read my contacts or do other limited actions in a way that is transparent to the user and revokable. (PS: [this short article about OAuth's history](https://oauth.net/about/introduction/) is a nice quick summary.)
 
 But somehow, SPA developers began taking pieces from OAuth out of context and using them for the long-term authentication of browser sessions where there is no third party involved. There are many tutorials out there that suggest using `Authorization: Bearer <jwt-here>` where a website in a browser is directly authenticating to its backend HTTP server without any OAuth concerns present at all. It doesn't make sense to do use `Authorization: Bearer <token>` to do that.
 
@@ -101,17 +104,19 @@ Randall blames himself for the popularity of JWTs, and more specifically Stormpa
 > \[...\]  
 > We made a lot of money off of promoting JSON Web Tokens. And so at the end of the day, the reason why JSON Web Tokens are so popular today is because over the last 3 years \[2015-2018ish\] both of our companies strategically used them as a way to market to developers, not based around any sort of like legitimate security concerns, but purely because it's a valuable marketing ploy in the security industry where this stuff is not happening very often.
 
-He suggests you validate these claims (JWT pun not intended) by searching google in an incognito tab for JSON web tokens and then noting how many of the top results are marketing pages for services like Auth0 and Stormpath. At the time of this writing Stormpath has been acquired by Okta and competitor Supertoken also has strong SEO here, but, yup. Note also that the most prominent JWT resource https://jwt.io/ is by Auth0/Okta!
+He suggests you validate these claims (JWT pun not intended) by searching google in an incognito tab for JSON web tokens and then noting how many of the top results are marketing pages for services like Auth0 and Stormpath. At the time of this writing Stormpath has been acquired by Okta and competitor Supertokens also has strong SEO here, but, yup. Note also that the most prominent JWT resource https://jwt.io/ is by Auth0/Okta!
 
 I'm not trying to make the argument that Okta/Auth0/etc are insecure. Whether you use them securely or insecurely is up to you.
 
-Rather, the problem I'm targeting here is that many developers use JWTs in places where they aren't appropriate because it's a self-perpetuating trend and session cookies are wrongly seen as old-fashioned, irrelevant, and insecure. Those companies seem inadvertently somewhat responsible for the trend, but whatever, what I hope you get out of this article is to not a negative impression of these companies, but rather an understanding of why it's a bad idea to use JWTs for your website's sessions in a pale imitation of these auth providers.
+Rather, the problem I'm targeting here is that many developers use JWTs in places where they aren't appropriate because it's a self-perpetuating trend and session cookies are wrongly seen as old-fashioned, irrelevant, and insecure. Those companies seem inadvertently somewhat responsible for the trend, but whatever, what I hope you get out of this article is to not a negative impression of these companies, but rather an understanding of why it's a bad idea to use JWTs for your application's sessions in a pale imitation of these auth providers.
 
 ### What Auth0 actually recommends for SPAs
 
-> When the SPA calls only an API that is served from a domain that can share cookies with the domain of the SPA, **no tokens are needed**. OAuth **adds additional attack vectors without providing any additional value and should be avoided in favor of a traditional cookie-based approach.** -[Auth0 "Token Storage" docs](https://auth0.com/docs/secure/security-guidance/data-security/token-storage), emphasis mine.
+> When the SPA calls only an API that is served from a domain that can share cookies with the domain of the SPA, **no tokens are needed**. OAuth **adds additional attack vectors without providing any additional value and should be avoided in favor of a traditional cookie-based approach.** -[Auth0 "Token Storage" docs (SPA tab)](https://auth0.com/docs/secure/security-guidance/data-security/token-storage), emphasis mine.
 
-We can't really blame services like Auth0. They over-hyped JWTs, but the hype-happy JS community was eager to embrace a new cool thing (and eager to misunderstand how the concerns of OAuth/OIDC/SSO are different than the concerns of session authentication for a website communicating with an API on a shared domain).
+We can't really blame services like Auth0. They over-hyped JWTs, but the hype-happy JS community was eager to embrace a new cool thing, and was eager to misunderstand how the concerns of OAuth/OIDC/SSO are different than the concerns of session authentication for a website communicating with an API on a shared domain.
+
+(However, it would be nice to see less docs quickstarts that say "don't store the JWT in localStorage, but as an example, we will.")
 
 # What's a Session Cookie?
 
@@ -119,7 +124,7 @@ A session cookie is a cookie with a cryptographically secure random string. [OWA
 
 ([Some session management libraries](https://github.com/expressjs/session/issues/176) force this randomness by signing a given session token with a random string, in order to prevent newbie developers from using session tokens that are easily predictable incrementing integers.)
 
-When a user authenticates to your server with credentials like their username and password, you check the credentials, then create a random session token and add it to your stateful sessions database so that that new session token is associated with that user. It might be something like `39ur20fu2948fy34fy3fo983u20du83s: {user_id: 123, session_expiration: 2024-01-29}`.
+When a user authenticates to your server with credentials like their username and password, you check the credentials, then create a random session token and add it to your stateful sessions database so that that new session token is associated with that user. It might be something like a cookie with a value `39ur20fu2948fy34fy3fo983u20du83s`, and a corresponding database entry like `session_id: 39ur20fu2948fy34fy3fo983u20du83s, user_id: 123, session_expiration: 2024-01-29`.
 
 Now whenever you receive a request on an authenticated route, you use the session cookie's value to query the database where you're storing your session data, and if there's a matching non-expired session, you have authentication.
 
@@ -141,7 +146,7 @@ CSRF quick summary: CSRF takes advantage of authentication/session cookies to im
 
 Some newbie developers (I hope they're newbies...) in the comments sections of our vast Internet confidently state that the best way to protect against a CSRF attack is to just not use session cookies. As we've seen, the alternatives to session cookies are less secure. CSRF is something developers can control by implementing well-known mitigations. See [OWASP's CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html) for details on how to prevent CSRF with the Synchronizer Token Pattern (stateful) or the Signed Double-Submit Cookie Pattern (stateless). Though you should use a tried-and-true library and not roll your own, it's still good to understand the mechanism.
 
-Note also that an `application/json` endpoint isn't susceptible to the attack described above. Only requests using the three aforementioned media types: `application/x-www-form-urlencoded`, `multipart/form-data`, and `text/plain` may be avoid triggering a CORS preflight ([other conditions](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) also need to be met). In a modern SPA, where you're making JSON requests to a RESTful HTTP server and never using traditional HTML form submission, a lot of the venues of CSRF are already closed off.
+Note also that an `application/json` endpoint isn't susceptible to the attack described above. Only requests using the three aforementioned media types: `application/x-www-form-urlencoded`, `multipart/form-data`, and `text/plain` may avoid triggering a CORS preflight ([other conditions](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) also need to be met). In a modern SPA, where you're making JSON requests to a RESTful HTTP server and never using traditional HTML form submission, a lot of the venues of CSRF are already closed off.
 
 You **should not rely on these inherent partial protections to mitigate CSRF, and should use one of the methods OWASP prescribes,** but I think it's notable that CSRF is tricky to exploit for an HTTP backend that doesn't use HTML form media types. Here are some vulnerabilities that may allow CSRF even in a purely no-forms, all-JSON HTTP server:
 
@@ -158,7 +163,25 @@ So please do use CSRF mitigation along with your session cookies, even though a 
 
 Follow the OWASP guidelines, using a battle-tested library for Signed Double-Submit Cookies or Synchronizer Token, and your session cookie will be secure against CSRF.
 
-It's still simpler than securing JWTs.
+# What about stateless cookies?
+
+Stateless cookies are implemented in a few ways: they might be cookies containing JWTs, or in some other format with no JWTs involved, usually with some library-specific signing and often encryption.
+
+This turns out to be quite similar to `Authorization: Bearer <jwt>`, with the differences:
+
+- PRO: Ability to use `HttpOnly` to make the credentials inaccessible to JavaScript.
+- CON: You need to be mindful of the 4kB max size limit of cookies.
+
+Overall, we have the same invalidation and staleness problems with stateless cookies as we do with stateless JWTs sent in a header. "Stateless" sessions mean using a client-side token as a cache for session state. That opens us up to stale session state and takes away our ability to invalidate that session.
+
+For example, in the stateless cookie library [iron-session](https://github.com/vvo/iron-session?tab=readme-ov-file#faq), the FAQ explains:
+
+> **How to invalidate sessions?**  
+> Sessions cannot be instantly invalidated (or "disconnect this customer") as there is typically no state stored about sessions on the server by default. However, in most applications, the first step upon receiving an authenticated request is to validate the user and their permissions in the database. So, to easily disconnect customers (or invalidate sessions), you can add an `isBlocked` state in the database and create a UI to block customers.
+>
+> Then, every time a request is received that involves reading or altering sensitive data, make sure to check this flag.
+
+We have "stateless sessions," but our first step is to query the database to access server-side session state and verify that the "stateless" session's content is still current. It's stateful sessions with extra steps, and the addition of those extra steps is a security liability. If we ever skip the step to verify with the database, we'll have quietly created a hole in our authentication security.
 
 # Other JWT Security Concerns
 

@@ -37,6 +37,9 @@ const IndexPage: React.FC<PageProps<Queries.AllBlogPostsQuery>> = ({
               title={post.frontmatter.title}
               // TODO: auto-generate summary first N characters
               summary={post.frontmatter.summary || ""}
+              splashImage={
+                post.frontmatter.splashImage?.childImageSharp?.gatsbyImageData
+              }
             />
           ))}
         </article>
@@ -57,6 +60,11 @@ export const postsQuery = graphql`
           date(formatString: "MMMM DD, YYYY")
           slug
           title
+          splashImage {
+            childImageSharp {
+              gatsbyImageData(width: 400, placeholder: BLURRED)
+            }
+          }
           summary
         }
       }
