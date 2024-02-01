@@ -24,7 +24,7 @@ const config: GatsbyConfig = {
                   node.frontmatter.splashImage?.childImageSharp?.fixed?.src;
                 // prepend splash image if it exists
                 const content = splashImageSrc
-                  ? `<img src="${splashImageSrc}" />${node.html}`
+                  ? `<img src="${siteUrl}${splashImageSrc}" />${node.html}`
                   : node.html;
                 return {
                   ...node.frontmatter,
