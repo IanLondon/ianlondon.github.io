@@ -13,19 +13,27 @@ const config: GatsbyConfig = {
       options: {
         feeds: [
           {
-            serialize: (data: { query: Queries.AllBlogPostsQuery }) => {
+            // TODO: use saved query from elsewhere for typegen
+            serialize: (data: { query: any }) => {
               const { allMarkdownRemark } = data.query;
-              return allMarkdownRemark.nodes.map((node) => {
+              return allMarkdownRemark.nodes.map((node: any) => {
                 // TODO: extract from metadata
                 const siteUrl = "https://ianlondon.github.io";
                 const pageUrl = `${siteUrl}/posts/${node.frontmatter.slug}`;
-                return Object.assign({}, node.frontmatter, {
+                const splashImageSrc =
+                  node.frontmatter.splashImage?.childImageSharp?.fixed?.src;
+                // prepend splash image if it exists
+                const content = splashImageSrc
+                  ? `<img src="${splashImageSrc}" />${node.html}`
+                  : node.html;
+                return {
+                  ...node.frontmatter,
                   description: node.frontmatter.summary,
                   date: node.frontmatter.date,
                   url: pageUrl,
-                  guid: pageUrl,
-                  // custom_elements: [{ "content:encoded": node.html }],
-                });
+                  guid: node.frontmatter.slug,
+                  custom_elements: [{ "content:encoded": content }],
+                };
               });
             },
             query: `
@@ -34,12 +42,21 @@ const config: GatsbyConfig = {
                   sort: [{ frontmatter: { date: DESC } }, { frontmatter: { title: ASC } }]
                 ) {
                   nodes {
+                    html
                     frontmatter {
                       date
                       slug
                       title
+                      splashImage {
+                        childImageSharp {
+                          fixed(width: 400) {
+                            src
+                          }
+                        }
+                      }
                       summary
                     }
+
                   }
                 }
               }
