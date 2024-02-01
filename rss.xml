@@ -1,4 +1,136 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Ian London's Blog: RSS Feed]]></title><description><![CDATA[A blog of software and other projects]]></description><link>https://ianlondon.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 01 Feb 2024 07:29:54 GMT</lastBuildDate><item><title><![CDATA[Please Don't Use JSON Web Tokens for Browser Sessions]]></title><description><![CDATA[Or, how I learned to love the session cookie]]></description><link>https://ianlondon.github.io/posts/dont-use-jwts-for-sessions</link><guid isPermaLink="false">dont-use-jwts-for-sessions</guid><pubDate>Sun, 28 Jan 2024 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/fbacb21570e228171e745fd5d55ad53d/497c6/they-live-sunglasses.png&quot; /&gt;&lt;h1&gt;JSON Web Tokens&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Ian London's Blog: RSS Feed]]></title><description><![CDATA[A blog of software and other projects]]></description><link>https://ianlondon.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 01 Feb 2024 22:54:50 GMT</lastBuildDate><item><title><![CDATA[Escape the algorithmic enshittification of the web]]></title><description><![CDATA[Thoughts on more intentional online existence]]></description><link>https://ianlondon.github.io/posts/escape-the-enshittification-of-the-web</link><guid isPermaLink="false">escape-the-enshittification-of-the-web</guid><pubDate>Thu, 01 Feb 2024 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/e939ef95313dca6cac17ccde145b840b/2244e/wildflowers.jpg&quot; /&gt;&lt;h1&gt;The State of Our Online Attention&lt;/h1&gt;
+&lt;p&gt;I have spent many, many, many unsatisfying hours scrolling on various social media feeds, and I don&apos;t want to do it any more. But it&apos;s hard to stop. The infinite scroll, whether it&apos;s the relatively mild vertical scroll or the overstimulating TikTok/stories/shorts scroll, siphons your attention into a frustratingly narrow space, taking away your ability to scan and filter. It is very much like a slot machine, mostly disappointment with a few glimmers of hope when you find something you actually enjoy, hinting at further enjoyment later. You only have two choices within the scroll: keep scrolling, or scroll faster. It works because it makes you forget that other options and modes of interaction exist. Just scroll. All this time adds up, and it costs you a chunk of your life.&lt;/p&gt;
+&lt;p&gt;Perhaps you and your friends have commiserated about the enshittification of search: googling isn&apos;t what it used to be. To find what we&apos;re looking for we share tricks like adding the word &quot;reddit&quot; at the end of our searches, because the broader internet is filled with spam. We&apos;ve lost something important. Generative &quot;AI&quot; is flooding our searches with even more garbage: the same listicles over and over, carelessly written summaries of copies of copies.&lt;/p&gt;
+&lt;p&gt;I follow a ton of artists in the classical realism scene, and a large fraction of their posts are of them protesting against Instagram censoring their figurative work. Every once in a while, there is a new flurry of complaint when they see their viewership drop off due to some silent and unknowable change to the Algorithm. This is a deep threat to their livelihood, and it&apos;s out of their control. It&apos;s obvious to everyone that this platform is feeding off of their work, but it doesn&apos;t seem like there&apos;s any alternative.&lt;/p&gt;
+&lt;p&gt;How do we escape this thing?&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ecb29d5356aa6cc4a7cf3d45394259a8/47311/sailor-moon-i-dont-want-to-get-stressed.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 66.89189189189189%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAANABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAEDBAX/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEAMQAAAB6K0TGVI//8QAGhAAAgIDAAAAAAAAAAAAAAAAAAECERASIv/aAAgBAQABBQKT5t7jGrx//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwE//8QAGRAAAgMBAAAAAAAAAAAAAAAAATEAEBEh/9oACAEBAAY/AjjgavuV/8QAHBAAAwABBQAAAAAAAAAAAAAAAAERQVFhgZHw/9oACAEBAAE/IWpyXCDgxE62L6C6TowTcEP/2gAMAwEAAgADAAAAEMs//8QAFREBAQAAAAAAAAAAAAAAAAAAEBH/2gAIAQMBAT8Qh//EABURAQEAAAAAAAAAAAAAAAAAAAEQ/9oACAECAQE/EBn/xAAcEAEBAAICAwAAAAAAAAAAAAABEQAhMUFRYdH/2gAIAQEAAT8QdWRryc2gKno+H3lQ246wabvw5NwCQqaad5CFDP/Z&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Usagi from Sailor Moon says &amp;quot;I don&amp;#39;t want to get stressed out anymore!&amp;quot;&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ecb29d5356aa6cc4a7cf3d45394259a8/1c72d/sailor-moon-i-dont-want-to-get-stressed.jpg&quot;
+        srcset=&quot;/static/ecb29d5356aa6cc4a7cf3d45394259a8/a80bd/sailor-moon-i-dont-want-to-get-stressed.jpg 148w,
+/static/ecb29d5356aa6cc4a7cf3d45394259a8/1c91a/sailor-moon-i-dont-want-to-get-stressed.jpg 295w,
+/static/ecb29d5356aa6cc4a7cf3d45394259a8/1c72d/sailor-moon-i-dont-want-to-get-stressed.jpg 590w,
+/static/ecb29d5356aa6cc4a7cf3d45394259a8/a8a14/sailor-moon-i-dont-want-to-get-stressed.jpg 885w,
+/static/ecb29d5356aa6cc4a7cf3d45394259a8/47311/sailor-moon-i-dont-want-to-get-stressed.jpg 1080w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h1&gt;Imagining and Creating A Multiplicity of Alternatives&lt;/h1&gt;
+&lt;p&gt;We can take back control over our own attention, our creative work, and our digital communities, using technology that already exists and is familiar. There isn&apos;t any one alternative, but a multiplicity of alternatives. We don&apos;t necessarily need to abandon the big social media platforms in an all-or-nothing way. Rather, we can lean into the many alternatives and find ways to meet our needs better.&lt;/p&gt;
+&lt;p&gt;Technology isn&apos;t the problem or solution here. What matters is intentionality. The state of how we connect to each other on the internet is something that just happened to us, in a sea change floated by billions of dollars, and it has slowly gotten worse and worse to the point that &quot;social media sucks&quot; is an uninterestingly obvious opinion. We don&apos;t have to be doomerist about it though! There are many escapes available to us.&lt;/p&gt;
+&lt;h2&gt;Chosen media feeds&lt;/h2&gt;
+&lt;p&gt;Podcasts are one of my favorite types of media, and my best alternative to the doomscroll. When I don&apos;t have the energy to engage too deeply in reading or working on a project, or when I&apos;m doing chores, I pop on a podcast. It&apos;s so much more satisfying to listen to &lt;a href=&quot;http://www.nightvalepresents.com/aliceisntdead&quot;&gt;an audio drama&lt;/a&gt; or &lt;a href=&quot;https://yourewrongabout.com/&quot;&gt;some weird story about a moral panic that was misrepresented by the media&lt;/a&gt; or &lt;a href=&quot;https://srslywrong.com/&quot;&gt;a utopian leftist sketch comedy show&lt;/a&gt; or &lt;a href=&quot;https://radiofreetotebag.castos.com/&quot;&gt;an unhinged but wholesome relationship advice show&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Something I&apos;ve unexpectedly come to love recently is using an RSS reader, and making a habit out of seeking out and adding blogs I enjoy. RSS? This sounds outdated, a nostalgic or cringy relic of the Y2K era. Just don&apos;t knock it until you tried it! We follow podcasts through an RSS feed, why not blogs? Like my podcast app, my RSS feed reader&apos;s scroll is satisfyingly finite, and it isn&apos;t trying to manipulate me with clickbait and outright rage bait. It only contains content I want to follow, and shows me posts I haven&apos;t seen before. One of the frustrating aspects of social media is that I end up seeing the same posts and memes repeated as they&apos;re re-shared, as a large chunk of the content the feed presents me. My RSS feed is rich and dense in a way that&apos;s strikingly different from any of my social media feeds. And the medium-to-long-form nature of the content across the blogs I follow just feels better to spend time with than social media content that can only last a few seconds.&lt;/p&gt;
+&lt;h2&gt;Cozy online communities&lt;/h2&gt;
+&lt;p&gt;Speaking of Y2K cringy nostalgia: when I was a teen in the 2000s, watching &lt;em&gt;The Matrix&lt;/em&gt; and &lt;em&gt;Serial Experiments: Lain&lt;/em&gt; and playing Counter-Strike at basement LAN parties, I hosted a phpBB forum for my friends on a hand-me-down desktop computer that ran 24/7 in a corner of my parents&apos; house, fan loudly spinning in its bulky beige frame. I remember spending many weeks learning the linux command line and struggling to understand the Apache HTTP server documentation.&lt;/p&gt;
+&lt;p&gt;There were a few RPG and art forums that captivated much of my time. The 2005ish version of conceptart.org happened to introduce me to the atelier movement, which shaped the last few years of my life when after a couple decades I finally got the opportunity to study figurative realism in a few atelier schools.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/914117eeace21d702babd9c94a51d285/72e01/old-computer.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 100%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAUABQDASIAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAAAAECAwT/xAAVAQEBAAAAAAAAAAAAAAAAAAABAP/aAAwDAQACEAMQAAABRzbRqsXOCLif/8QAGxABAAICAwAAAAAAAAAAAAAAAQIQERIAITH/2gAIAQEAAQUCejfNYWUYpKXqDzQK/8QAFBEBAAAAAAAAAAAAAAAAAAAAIP/aAAgBAwEBPwEf/8QAFBEBAAAAAAAAAAAAAAAAAAAAIP/aAAgBAgEBPwEf/8QAGhAAAgMBAQAAAAAAAAAAAAAAABABESExYf/aAAgBAQAGPwKyqhemzi04v//EABwQAAICAwEBAAAAAAAAAAAAAAERACEQMUFRcf/aAAgBAQABPyEtd/exCAX9DrA6AgULQ2551NIgKYQ4/9oADAMBAAIAAwAAABD7CML/xAAWEQEBAQAAAAAAAAAAAAAAAAARASD/2gAIAQMBAT8Qq4//xAAVEQEBAAAAAAAAAAAAAAAAAAABIP/aAAgBAgEBPxBY/8QAHRABAQACAgMBAAAAAAAAAAAAAREAITGhEEFRYf/aAAgBAQABPxB7CKgcF81kGEV2vxt8be721mIaZQqPeQOAQgE9YDBTCpg4TE6z/9k=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;low-res pixel art of old desktop computer&quot;
+        title=&quot;&quot;
+        src=&quot;/static/914117eeace21d702babd9c94a51d285/1c72d/old-computer.jpg&quot;
+        srcset=&quot;/static/914117eeace21d702babd9c94a51d285/a80bd/old-computer.jpg 148w,
+/static/914117eeace21d702babd9c94a51d285/1c91a/old-computer.jpg 295w,
+/static/914117eeace21d702babd9c94a51d285/1c72d/old-computer.jpg 590w,
+/static/914117eeace21d702babd9c94a51d285/a8a14/old-computer.jpg 885w,
+/static/914117eeace21d702babd9c94a51d285/72e01/old-computer.jpg 1024w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Now in the 2020s, creating a cozy digital space to chat with your friends is incredibly accessible. I have an uncountable number of fragmented group chats with friends that die out and occasionally come back up again.&lt;/p&gt;
+&lt;p&gt;I&apos;m trying to catch myself before I share something to social media, and ask myself if it would be better to share in a message or Discord or whatever with the group of people I actually mean to share it to, and have a more substantial interaction. This isn&apos;t that deep, I&apos;m mostly talking about sharing dumb jokes and memes, but at the same time the non-interaction of liking a friend&apos;s silly social media post is empty compared to getting the same silly thing in text that is meant just for you.&lt;/p&gt;
+&lt;p&gt;Filling the role of those old PHP forums, I have a few community chat spaces I love that I happened to stumble into and build relationships with those remote strangers over the years. These spaces are hard to find but so valuable when you find one that fits.&lt;/p&gt;
+&lt;h2&gt;Own your platform&lt;/h2&gt;
+&lt;p&gt;Part of my inspiration for reviving my 2016 blog and writing this post among others was this concept: &lt;a href=&quot;https://indieweb.org/POSSE&quot;&gt;POSSE - Publish (on your) Own Site, Syndicate Elsewhere&lt;/a&gt;. I came across IndieWeb and POSSE right after seeing a lot of frustrated posts from the figurative artists I mentioned earlier, whose work is being increasingly censored by Instagram after a long history of being unaccountable to artists. IndieWeb includes more technical details, but in general &quot;publish on your own site, syndicate elsewhere&quot; means taking control of your own platform and creative work by using social media as a tool to draw followers to your site, rather than having social media just use you.&lt;/p&gt;
+&lt;p&gt;This used to be common practice, because there wasn&apos;t really any other way to do it. People would make a WordPress site or something similar, add a mailing list, maybe an RSS feed, and own their own platform. This practice never died out, it has quietly lived on. There are tons of active blogs out there with mailing lists that are worth subscribing to, and they often syndicate out to social media.&lt;/p&gt;
+&lt;p&gt;For creators of all kinds, from personal blogs to meme-makers to artists and writers, this is a powerful approach. After overcoming the stumbling block of creating your own platform, and figuring out how to automate or make a habit out of syndicating out to other platforms, it&apos;s pretty smooth sailing.&lt;/p&gt;
+&lt;h2&gt;Own your attention&lt;/h2&gt;
+&lt;p&gt;And all of us, as followers of the artists and writers and other creators we enjoy, can escape the timesuck and frustration of the endless scroll and improve the quality of our online free time. I think it&apos;s ineffective to just &quot;cold-turkey&quot; stop staring at the infinite scroll with nothing to replace the vacuum. There are &lt;a href=&quot;https://en.wikipedia.org/wiki/Neurodiversity&quot;&gt;many different sorts of experiences of attention&lt;/a&gt; out there but a lot of us need some mindless place to go and no amount of &quot;willpower&quot; will endure against a vacuum.&lt;/p&gt;
+&lt;p&gt;So construct that place with intention, fill it with things you love. Make a list of the things you enjoy in that mindless time: your favorite podcasts, a list of books and movies you&apos;ve been meaning to spend time with, downtime music mix tapes, doodling or some similar low-stakes cozy habit. Make your RSS feed and mailing list subscriptions a rewarding place for your attention to relax into. Try as you might, you can&apos;t curate Instagram or Facebook or Twitter or TikTok or YouTube etc that way, there are too many distractions built in by a design that is trying to extract energy and money from you.&lt;/p&gt;
+&lt;p&gt;Design your own distractions, in a way that suits you.&lt;/p&gt;
+&lt;h1&gt;Third Spaces in the AFK&lt;/h1&gt;
+&lt;p&gt;This is a post mostly about life online. I think most of us spend quite a decent chunk of time online, but it&apos;s not something we&apos;re comfortable admitting.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.versobooks.com/products/460-glitch-feminism&quot;&gt;Glitch Feminism: A Manifesto&lt;/a&gt; is a sort of prose-as-performance-art book I enjoyed reading with a small online book club a while back. Legacy Russell resists calling the offline world &quot;the real world&quot;, instead using the term AFK (Away From Keyboard), because the online world &lt;strong&gt;is&lt;/strong&gt; real, and a real place to form identities and to create, in ways that the AFK world doesn&apos;t always permit, especially for marginalized people.&lt;/p&gt;
+&lt;p&gt;A &quot;third space&quot; is a place for community and public life. If we count along, there&apos;s home, there&apos;s work, and there&apos;s third spaces: bars, gyms, coffee shops, makerspaces, public libraries, parks.&lt;/p&gt;
+&lt;p&gt;The digital world is the biggest and most accessible third space most of us have got. The AFK world can be sparse or even hostile when you&apos;re looking for a place to just chill and exist and be comfortable, especially if you&apos;re living in a geographical location that is expensive or difficult to travel around or maybe just doesn&apos;t have much going on.&lt;/p&gt;
+&lt;p&gt;I spend a lot of time online, and I also go to a ton of meetups and community events. Often they take a lot of energy to show up for, they aren&apos;t at all a substitute for the headspace of just browsing and relaxing that we go to the infinite scroll hoping to get. In the spirit of multiplicity, I want to bring up a nice AFK experience I had recently which kind of matches that headspace.&lt;/p&gt;
+&lt;p&gt;A &quot;quiet book club&quot; is a regular meeting with a &quot;bring your own book&quot; format. Meet in a park if weather permits or get a few tables at a cafe. Everyone chats for a bit, then reads silently for an hour, then when the hour ends we all go around and talk about what we read, we hang out, and go home. It&apos;s so low-stakes, you don&apos;t need to prepare, there&apos;s just enough structure for it to be cohesive and yet it&apos;s very relaxed. I thought it was really cool!&lt;/p&gt;
+&lt;h1&gt;Another Good Book&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.goodreads.com/en/book/show/42771901&quot;&gt;How To Do Nothing: Resisting the Attention Economy&lt;/a&gt; is a wonderful rich and sprawling essay about resisting the pressures of all the toxic aspects of our culture that social media tends to amplify. I think you&apos;ll enjoy this book if you like this post, and its discussion of regionality and a connection to place is solarpunk as hell. Bring it to your next quiet book club!&lt;/p&gt;
+&lt;h1&gt;The End&lt;/h1&gt;
+&lt;p&gt;There is no more to scroll past here, where you direct your attention next is up to you.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c658a77cdacaf9cd455009263d89bbbb/f6a10/spooky-beach.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.08108108108109%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUBAgP/xAAVAQEBAAAAAAAAAAAAAAAAAAAAA//aAAwDAQACEAMQAAABwsqmkWAuD//EABgQAQEBAQEAAAAAAAAAAAAAAAABERIC/9oACAEBAAEFAp6jp0lra1//xAAVEQEBAAAAAAAAAAAAAAAAAAAAEv/aAAgBAwEBPwGEP//EABURAQEAAAAAAAAAAAAAAAAAAAAS/9oACAECAQE/AaU//8QAFBABAAAAAAAAAAAAAAAAAAAAIP/aAAgBAQAGPwJf/8QAGRAAAgMBAAAAAAAAAAAAAAAAAAERMVFh/9oACAEBAAE/IdSI6hpNohWdhtp//9oADAMBAAIAAwAAABAY3//EABURAQEAAAAAAAAAAAAAAAAAABBx/9oACAEDAQE/EKH/xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAECAQE/ED//xAAcEAACAgIDAAAAAAAAAAAAAAAAASExEZFhsdH/2gAIAQEAAT8QaS7iF43HtQhbHIkK4y77P//Z&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;spooky beach at night&quot;
+        title=&quot;&quot;
+        src=&quot;/static/c658a77cdacaf9cd455009263d89bbbb/1c72d/spooky-beach.jpg&quot;
+        srcset=&quot;/static/c658a77cdacaf9cd455009263d89bbbb/a80bd/spooky-beach.jpg 148w,
+/static/c658a77cdacaf9cd455009263d89bbbb/1c91a/spooky-beach.jpg 295w,
+/static/c658a77cdacaf9cd455009263d89bbbb/1c72d/spooky-beach.jpg 590w,
+/static/c658a77cdacaf9cd455009263d89bbbb/a8a14/spooky-beach.jpg 885w,
+/static/c658a77cdacaf9cd455009263d89bbbb/fbd2c/spooky-beach.jpg 1180w,
+/static/c658a77cdacaf9cd455009263d89bbbb/f6a10/spooky-beach.jpg 1719w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Please Don't Use JSON Web Tokens for Browser Sessions]]></title><description><![CDATA[Or, how I learned to love the session cookie]]></description><link>https://ianlondon.github.io/posts/dont-use-jwts-for-sessions</link><guid isPermaLink="false">dont-use-jwts-for-sessions</guid><pubDate>Sun, 28 Jan 2024 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/fbacb21570e228171e745fd5d55ad53d/497c6/they-live-sunglasses.png&quot; /&gt;&lt;h1&gt;JSON Web Tokens&lt;/h1&gt;
 &lt;p&gt;In the JavaScript community, JSON Web Tokens (JWTs) generally stored in &lt;code&gt;localStorage&lt;/code&gt; have become a popular way to implement user authentication, especially for Single-Page Apps (SPAs). That&apos;s the way I first learned when I picked up Express in 2016. In the 2010s when I learned Django I used Jinja templates and session cookies and SQL, and in the mid 2010s the new hotness was React Express Mongo and JWTs. Every resource on node/Express authentication recommended doing authentication this way, so I didn&apos;t question it for a long time.&lt;/p&gt;
 &lt;p&gt;On StackOverflow and across the web dev tutorial-o-sphere, session cookies are often portrayed as outdated, a 2000s internet technology. If you search around for tutorials about &quot;how to implement authentication in NodeJS&quot;, many posts imply that we all ditched old-fashioned session cookies when we moved from &quot;traditional&quot; web apps based on Rails, Django, etc to the new school of Vue, Angular, React, and the rest. Numerous blogs claim that JWTs are &quot;more secure&quot;, then proceed to describe an inherently insecure way to use them!&lt;/p&gt;
 &lt;p&gt;This is a mistake. JWTs are fantastic for their intended purpose: &lt;a href=&quot;https://datatracker.ietf.org/doc/html/rfc7519&quot;&gt;&quot;representing claims to be transferred between two parties.&quot;&lt;/a&gt; That&apos;s why we use them in OpenID Connect (OIDC) to delegate authentication.&lt;/p&gt;
