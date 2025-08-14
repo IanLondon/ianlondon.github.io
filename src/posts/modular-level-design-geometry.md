@@ -12,25 +12,27 @@ splashImage: ../images/modular-design-geometry/footprint-dimensions.png
 
 When building 3D games, it's standard practice to have an art team make 3D models and hand those models off to level designers to arrange inside a game engine. With a well-designed kit, level designers can snap together pieces like Legos and build interesting levels without needing every part of the level custom-built and inflexible.
 
-This is a difficult task. Graciously, several experienced game industry professionals have shared some resources. I've listed my sources below in the Resources section.
+This is a difficult task. Graciously, several experienced game industry professionals have shared some helpful resources which I've borrowed from. I've listed my sources below in the Resources section.
 
 There isn't much out there about the fine details of how to go about building a level kit, so hopefully this article will be helpful.
 
 # Outline of a geometric system
 
-[Joel Burgess and Nathan Purkeypile](http://blog.joelburgess.com/2013/04/skyrims-modular-level-design-gdc-2013.html) describe a footprint-based system that they used for several games including Skyrim and Fallout 4. The footprint is just a 3d bounding box that every kit piece must fit into. 
-
-It's like the concept of tilemaps in 2D games, but in 3D. Notice how you tend to need corners and mid-pieces for nice intersections. And by repeating the mid-pieces you can create long objects like this clearing and lake. (Animated GIF from [Fyrox Game Engine book](https://fyrox-book.github.io/scene/tilemap.html?highlight=slice#nine-slice-tool), a game engine written in Rust so it seems cool to me!)
-
-![tile map](../images/modular-design-geometry/fyrox-book--nine_slice.gif)
+[Joel Burgess and Nathan Purkeypile](http://blog.joelburgess.com/2013/04/skyrims-modular-level-design-gdc-2013.html) describe a footprint-based system that they used for several games including Skyrim and Fallout 4. The **footprint** is just a 3D bounding box that every kit piece must fit into. 
 
 Joel Burgess mentions:
 
 > It's extremely important to note that the footprint is the full bounds of the piece, and not the traversable space of the piece. It is the imaginary grid that things line up on. Pieces always exist within the footprint. The only time a piece is at the edge of the footprint is when it is actually snapping together with another kit piece. Avoid the temptation to build to the edge of the footprint, or even worse, outside of it.
 
+It's like the concept of tilemaps in 2D games, but in 3D. Notice in the animation below how you tend to need a combination of corners and mid-pieces for nice intersections. And by repeating the mid-pieces you can create long objects like this clearing and lake. (Animated GIF from [Fyrox Game Engine book](https://fyrox-book.github.io/scene/tilemap.html?highlight=slice#nine-slice-tool), a game engine written in Rust so it seems cool to me!)
+
+![tile map](../images/modular-design-geometry/fyrox-book--nine_slice.gif)
+
+In that tilemap of the clearing and the lake, there are only inside corners and no outside ones, so you can only make a limited set of shapes. In 3D, this is the same.
+
 ## A Visual Guide
 
-In my design system, we expect a 2m tall player. (This seems to be somewhat standard, in Unity at least). I found that 3m seems like a useful size to design parts around -- big enough to fit a door in without getting too close to the edges, and it sets up a decent standard ceiling height for the architectural mood I'm going for. This is a subjective choice guided by blocking in various parts next to a 2m human model ([one of Blender's human base meshes](https://www.blender.org/download/demo-files/), scaled to 2m).
+In my design system, for a kit I'm building, I expect a 2m tall player. (This seems to be somewhat standard, in Unity at least). I found that 3m seems like a useful size to design parts around -- big enough to fit a door in without getting too close to the edges, and it sets up a decent standard ceiling height for the architectural mood I'm going for. This is a subjective choice guided by blocking in various parts next to a 2m human model ([one of Blender's human base meshes](https://www.blender.org/download/demo-files/), scaled to 2m).
 
 The footprint is just a conceptual bounding box for a kit part. Here is the footprint visualized in 2 ways. The outside of the frame box on the right is a 3m cube. On the left, the green surface is the absolute edge of the footprint. In gray, the walls/floors are floating 0.125m away from the green border.
 
@@ -45,7 +47,7 @@ Here's the footprint of an adjacent wall and floor. Once again, the wall/floor i
 
 ![footprint example wall floor](../images/modular-design-geometry/footprint-example-wall-floor.png)
 
-A complex part inside a footprint. The ends are exactly flush with the bounds of the footprint. You can check this by looking in the properties of the verticies and confirming they're at 1.5 or -1.5 in the corresponding axis (for our 3m cube footprint, the outer boundaries are 1.5m from the center).
+A complex bent catwalk part inside a footprint. The ends are exactly flush with the bounds of the footprint. You can check this by looking in the properties of the verticies and confirming they're at 1.5 or -1.5 in the corresponding axis (for our 3m cube footprint, the outer boundaries are 1.5m from the center).
 
 Note that the position of the object origin here is following the half-off-center convention I'm using for free-standing panels, described below. On the flat catwalks to the left and bottom of the curved section, the catwalk platform is centered about the origin, offset by 0.125m to align with the floor and ceiling planes.
 
@@ -73,6 +75,10 @@ What about big parts that don't fit in a 3m cube? We can make a larger footprint
 Here is a 6x6x6 footprint for a large opening.
 
 ![6x6x6 footprint](../images/modular-design-geometry/6x6x6-footprint.png)
+
+In a tilemap, something twice the size of a tile would be split up into 4 tiles that compose together to get the 2x2-tile part. But in 3D, it seems like extra work and problems to split them up only to merge them again.
+
+It might make sense to use a 3x6x6 footprint for this part, which IRL would just mean moving the object origin 1.5m closer in its 3m dimension.
 
 ### Free-standing panels and other exceptions
 
@@ -106,17 +112,17 @@ STANDARD FLOOR/CEILING/WALL WIDTH: **0.125m**. One subgrid unit (0.25m, below) i
 
 MARGIN: When you print a document, it's good to leave a margin so that nothing will get cut off. Similarly, when making a panel that might end up intersecting a perpendicular wall/floor/ceiling/etc, it's good to leave a margin so that when you add that wall/floor/ceiling, it doesn't clip your new panel in an ugly way.
 
-SUBGRID: **0.25m** optional grid. The subgrid is a finer-resolution grid that is optional to use as appropriate. It should be used to align things like trim, recesses, inset panels, and so on, across pieces. Given that the footprint is a 3m cube, 0.25m grid units is nice because it's 1/12 the cube. 12 is a convenient number, it gives us the ability to align to the grid evenly with many fractions of the footprint: 1/12, 1/6, 1/4, 1/3, 1/2.
+SUBGRID: **0.25m** optional grid. The subgrid is a finer-resolution grid that is optional to use as appropriate. It should be used to align things like trim, recesses, inset panels, and so on, across pieces. Given that the footprint is a 3m cube, 0.25m grid units is nice because it's 1/12 the cube. 12 is a convenient number, it gives us the ability to align to the subgrid evenly with many fractions of the footprint: 1/12, 1/6, 1/4, 1/3, 1/2.
 - The subgrid isn't a strict rule. It's OK to use half of the subgrid resolution `0.25m * 1/2 = 0.125m`, when needed (like the wall/floor/ceiling width), but try to stick to 0.25m when you can for things like trim or railings that need to line up with adjacent parts.
 
-GREEBLES: Stuff like keypads, small vents, debris, and other non-integral detail bits don't need to be placed in a footprint. It's often nice if their main dimensions can line up with the grid when possible. It's usually most convenient to put their object origin on the center of whatever surface snaps up against the wall. A table's origin could be the center of its bottom plane so it snaps to the ground, a light switch's origin would be the backmost plane where it's flush with a wall, a ceiling lamp's origin would be the top where it snaps on to a ceiling.
+GREEBLES: Stuff like keypads, small vents, debris, and other non-integral detail bits don't need to be placed in a footprint. It's often nice if their main dimensions can line up with the subgrid when possible. It's usually most convenient to put their object origin on the center of whatever surface snaps up against the wall. A table's origin could be the center of its bottom plane so it snaps to the ground, a light switch's origin would be the backmost plane where it's flush with a wall, a ceiling lamp's origin would be the top where it snaps on to a ceiling.
 
 CHARACTER DIMENSIONS
 - 2m tall
-- Can step up 0.2m vertically. Anything higher requires jumping.
-- (TODO finalize minimum traversable width)
-- (TODO standard jump height?)
-- No crouching, if we had crouching it would be important to note the smallest frame you could traverse crouched.
+- Know what height your character can step up vertically. Eg maybe they can step up on a surface 0.2m above where they're standing like a stair or low platform. Anything higher requires jumping.
+- Know your minimum traversable width and make the narrowest passages a little wider than that.
+- Know your jump height.
+- If your player can crouch or crawl it would be important to note the lowest height you could traverse in those positions so you know to make crawlspaces a little higher than that.
 
 ### Summary:
 
@@ -124,43 +130,77 @@ CHARACTER DIMENSIONS
 	- Tip: to make sure the origin is reasonable at a rotation point, try rotating the object 90 degrees in different axes and make sure it winds up aligned with a 90 degree oriented "wall" without translation.
 - Walls/floors/ceilings/etc, in other words planes that are coplanar with a side of the footprint box, should be 0.125m away from their side of the box. Since the origin is the center and the side of the box is 1.5m, that means they should generally be at 1.375 in whatever axis they're perpendicular to (`1.5m from center to edge of 3m cube - 0.125m in from the edge = 1.375m from the center`).
 - In general, leave a 0.125m margin around walls/floor/ceiling panels because that's where other panels will often fall. However, you should scale the plane out to exactly meet the edges of the bounding footprint -- just be aware that adjacent 90-degree panels can intersect into that margin area.
-- The subgrid isn't a hard rule, but just a suggestion to make things line up and be more cross-compatible. The grid is 0.125m. But when you can, try to stick to 0.25m increments when so things match up more easily.
+- The subgrid isn't a hard rule, but just a suggestion to make things line up and be more cross-compatible. The subgrid is 0.125m. But when you can, try to stick to 0.25m increments when so things match up more easily.
 
-
-# TODO needs to be edited
-
-## Local grids
-
-TODO explain, tilt object and continue with that new grid, multiple rotations of grids can be present in a scene, eg two streets that make a non-perpendicular X.
-
+# More concepts in modular level design
 
 ## Interfacing
 
-**Interfaces** are my term for the area where two kit pieces match up
+**Interfaces** are my term for the area where two kit pieces match up, along the edge of the footprint.
 
-TODO: examples, seamless, problems updating, using frames and gaps to break up, AToB seam transitions, naming conventions
+Like tiling spritemaps in a 2D game, or textures, symmetry makes things easiest.
+
+For parts that run along a straight line like a wall, it's useful to have left-right symmetry. You can do whatever you want in the middle in different variants, but as long as the interface is symmetrical they'll match up. Below in orange are the interfaces for this wall part.
+
+![interface example](../images/modular-design-geometry/interfacing-edge.png)
+
+Here, 3 parts with the same interface can be combined in many orientations thanks to their interface symmetry.
+
+![complex interfacing example](../images/modular-design-geometry/symmetrical-interfacing.png)
+
+Sometimes you can use things like recesses and framing that would exist naturally, like wood beams and frames, seams between concrete, to make the interfaces simple and compatible across many different parts. I tried to show in this example that if you have a repeating frame around panels, you can get away with whatever you want inside... the outer frames are doing all the work here. Notice here that the ceiling and wall are clipping into the bottom frame -- that's why it's good to have details inset by a small margin from the edge when you can.
+
+![uniform interfacing example](../images/modular-design-geometry/uniform-interfacing.png)
+
+Inside corners (left side) generally need to be their own part: because of the wall offset, the inside corner overlaps itself on a full-width wall.
+
+Similarly, outside corners (right side) need bevels/caps because the wall thickness offset creates a gap. Here's what happens when you just line up walls together, it's gross:
+
+![bad interfacing](../images/modular-design-geometry/bad-interfacing.png)
+
+The solution is to combine the walls together as cleanly joined inner corner and outer corner parts, like in a 2D tilemap.
+
+![cleaned interfacing](../images/modular-design-geometry/cleaned-interfacing.png)
 
 ## Pivot-and-flange
 
-TODO. Pillar, archway, etc disguises bad interfaces, it's an easy hack.
+Pillar, archway, etc disguises bad interfaces, it's an easy hack. Most useful for odd angles, for 90 or 45 degree angles it's generally better to make a bevel part.
+
+![bad gap](../images/modular-design-geometry/bad-gap.png)
+
+![pivot and flange](../images/modular-design-geometry/pivot-and-flange.png)
+
+You can also do this trick to cover up inner/outer corners in a combination of walls that don't have corner parts built.
 
 ## Texture concerns
 
-The proof pieces have no texture
+Texel density is the resolution of textures in space. It's usually expressed in pixels per meter (or per cm).
 
-Textures that are meant to tile across kit pieces
+For example, in a game with a 512 px/m texture density, a 1m square wall panel should use a 512x512 pixel square texture. 
 
-TODO: define texel density
+Why does it matter? If you have different texel densities, you'll get a weird effect where some objects look sharp and others look blurry even when they're side by side. The goal is to have a mostly uniform texel density. It's okay if it has maybe 25% variation, allowing you to do minor scaling, but if you scale objects more than that their texel density differences will make them look bad.
 
-Texel density should be uniform. Don't be too conservative, you can always downsample textures easily, while upsampling is generally labor-intensive.
+For this system, let's say a 2k texture should be standard for a part like a 3m square wall part. So our texel density could be 2048px/3m = **682.66 px/m**. It's not a whole number bc the 3m footprint, but since usually we'd think of it like "a typical wall/floor/ceiling should use a 2k texture", that seems fine.
+
+Texel density helps different objects look consistent with each other, but it is also important to be consistent on different sections of a single object. It looks bad if some areas look stretched out or blurry, especially against others that are sharp and undistorted.
+
+Don't be too conservative in your texel density choice, you can always downsample textures easily. Unity lets you choose a lower resolution on the asset properties panel. But upsampling is labor-intensive.
+
+To learn more, Timothy Dries has written a good article [here](https://www.beyondextent.com/deep-dives/deepdive-texeldensity).
+
+Blender has a helpful [Texel Density Checker](https://extensions.blender.org/add-ons/texel-density-checker/) plugin.
+
+Textures that are meant to tile across kit pieces can take advantage of the footprint system by having the UV grid correspond to the footprint dimensions.
+
+Objects that are close up to the character, like hands or weapons, often have a higher texel density than anything else because they are closer to the camera and larger on the screen.
 
 ## Kit hierarchy
 
 These are my terms, I'm attempting to name things I saw in the Fallout 4 GDC talk where they shared some learnings about making kit pieces more mix-and-match-able.
 
-**Template Proofs** These are featureless or nearly-featureless objects useful to build atoms. For example, a standard doorway block-ins. These are just helpful tools for 3d artists to get started on kit pieces faster because there's minimal geometry and correct dimensions. They can be exported as a **"proof kit"** so that level designers can give 3d artists early feedback about whether the big ideas of the kit are working.
+**Template Proofs** These are featureless or nearly-featureless objects useful to build atoms. For example, a standard doorway block-ins. These are just helpful tools for 3D artists to get started on kit pieces faster because there's minimal geometry and correct dimensions. They can be exported as a **"proof kit"** so that level designers can give 3D artists early feedback about whether the big ideas of the kit are working.
 
-**Atoms** are not exported to the game editor, they're only in used 3d modeling software to compose parts. They're too tiny to be useful to a level designer, it would be a lot of work to assemble them into something. Atoms could include door handles, wall ornamentation, a part of a window that is reused, etc. It can be a good idea to put them in a library for the convenience of the 3d artists, but be careful changing them, it's always safer to duplicate.
+**Atoms** are not exported to the game editor, they're only in used 3D modeling software to compose parts. They're too tiny to be useful to a level designer, it would be a lot of work to assemble them into something. Atoms could include door handles, wall ornamentation, a part of a window that is reused, etc. It can be a good idea to put them in a library for the convenience of the 3D artists, but be careful changing them, it's always safer to duplicate.
 
 **Molecules** are the smallest parts that are exported to the game editor. They're a bit big enough to be useful to a level designer. The chemistry metaphor isn't perfect -- molecules here are not necessarily made up of atoms, they can be made from scratch.
 
@@ -168,9 +208,23 @@ These are my terms, I'm attempting to name things I saw in the Fallout 4 GDC tal
 
 For the exported pieces, a good rule is to make big objects less granular than small ones. For example, a kit for building a city can have pieces that are whole facades or entire buildings. A kit for building a hallway can have small wall panels and individual doors. If it's too granular, it's tedious to work with in the Editor.
 
-## Naming
+## Local grids
 
-TODO `[Kit Name].[Subkit Name].[???].[Mid/Bevel/Cap].[UniqueDescriptionOrLetter][L/R if mirrored][VersionNumber]`
+You can get a lot of variety in a level by having multiple grids to place footprints on. In a game editor, you can make a tunnel or street turn at an irregular angle by having local grids that aren't aligned to global XYZ.
+
+![local grids](../images/modular-design-geometry/local-grids.png)
+
+An easy way to do this in Unity without plugins is by aligning a set of pieces to the world grid, building up your street or whatever it is, parenting the whole section under an Empty, and then rotating the empty.
+
+This often introduces an irregular gap, which you can fill/cover by variations of the pivot-and-flange method.
+
+## WIP: Naming Parts
+
+The resources I've found highlight the importance and difficulty of naming things. Potentially, the name itself could be parsed into a game editor plugin to allow designers to filter and find matching. But even without such a system, it's still hard to find things in a complex kit without a good name.
+
+Maybe something like this? `[Kit Name].[Subkit Name].[Type].[UniqueDescriptionOrLetter].[VersionNumber].[L/R if mirrored]`
+
+For example, `Village.FancyHouse.InnerCorner.OakFrameStucco.B.0`
 
 - "CornerIn" is an inside corner, the corner of a room. "CornerOut" is an outside corner that goes the other way, like on the outside of a building.
 - "BevelFull" "BevelHalf"
@@ -233,7 +287,7 @@ Some shapes are not space-filling on their own, but in combination with other sh
 
 Cubes are familiar to us, most rooms are shaped like a box and fit into cube shapes. So we don't want a system based on a footprint that is incompatible with a cube. What can coexist with cubes, is space filling, and doesn't require complex rotations to match up?
 
-Any 2D tesselation can be extruded to make a 3d tesselation. But these all have the same problem: they end up being flat on the "top".
+Any 2D tesselation can be extruded to make a 3D tesselation. But these all have the same problem: they end up being flat on the "top".
 - A triangular prism (extruded triangle, ie cube cut in half diagonally on one axis) can interface with a cube on its rectangular sides and is space-filling without rotation. This would be a promising one but it's very acute and makes sharp corners, and is so similar to a cube that it doesn't give us much new geometry.
 - A hexagonal prism is more interesting. It gives us roomy corners, and its square sides easily interface 
 
@@ -247,7 +301,7 @@ For special cases, a truncated icosahedron is interesting, or other [Goldberg po
 
 ### Deep Space Hallucinations
 
-It is interesting to think about crystal structures, [space frames](https://en.wikipedia.org/wiki/Space_frame), [3d honeycombs](https://en.wikipedia.org/wiki/Honeycomb_%28geometry%29) that tesselate space, [point groups](https://en.wikipedia.org/wiki/Point_groups_in_three_dimensions), the [17 wallpaper groups](https://en.wikipedia.org/wiki/Wallpaper_group) , and finding the perfect set of angles that make a flexible kit that doesn't tend to orthogonality even in the vertical axis. But in pursuit of this geometry, you can end up in outer space.
+It is interesting to think about crystal structures, [space frames](https://en.wikipedia.org/wiki/Space_frame), [3D honeycombs](https://en.wikipedia.org/wiki/Honeycomb_%28geometry%29) that tesselate space, [point groups](https://en.wikipedia.org/wiki/Point_groups_in_three_dimensions), the [17 wallpaper groups](https://en.wikipedia.org/wiki/Wallpaper_group) , and finding the perfect set of angles that make a flexible kit that doesn't tend to orthogonality even in the vertical axis. But in pursuit of this geometry, you can end up in outer space.
 
 [Geometry of Thinking](https://geometryofthinking.com/2023/08/05/tensegrity/)
 
