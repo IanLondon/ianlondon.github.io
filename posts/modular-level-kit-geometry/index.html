@@ -11,7 +11,7 @@
 <p>It's extremely important to note that the footprint is the full bounds of the piece, and not the traversable space of the piece. It is the imaginary grid that things line up on. Pieces always exist within the footprint. The only time a piece is at the edge of the footprint is when it is actually snapping together with another kit piece. Avoid the temptation to build to the edge of the footprint, or even worse, outside of it.</p>
 </blockquote>
 <p>It's like the concept of tilemaps in 2D games, but in 3D. Notice in the animation below how you tend to need a combination of corners and mid-pieces for nice intersections. And by repeating the mid-pieces you can create long objects like this clearing and lake. (Animated GIF from <a href="https://fyrox-book.github.io/scene/tilemap.html?highlight=slice#nine-slice-tool">Fyrox Game Engine book</a>, a game engine written in Rust so it seems cool to me!)</p>
-<p><img src="../images/modular-design-geometry/fyrox-book--nine_slice.gif" alt="tile map"></p>
+<p><img src="/fb26740e52874290936b321ae87f1402/fyrox-book--nine_slice.gif" alt="tile map"></p>
 <p>In that tilemap of the clearing and the lake, there are only inside corners and no outside ones, so you can only make a limited set of shapes. In 3D, this is the same.</p>
 <h2>A Visual Guide</h2>
 <p>In my design system, for a kit I'm building, I expect a 2m tall player. (This seems to be somewhat standard, in Unity at least). I found that 3m seems like a useful size to design parts around -- big enough to fit a door in without getting too close to the edges, and it sets up a decent standard ceiling height for the architectural mood I'm going for. This is a subjective choice guided by blocking in various parts next to a 2m human model (<a href="https://www.blender.org/download/demo-files/">one of Blender's human base meshes</a>, scaled to 2m).</p>
@@ -150,8 +150,8 @@
 <li>When you make a hole in a wall/floor/ceiling, like a door or window, the wall needs thickness. An infinitesmally thin wall would look like a glitchy mistake, seeing edges of planes in 3D ruins the illusion of form and space.</li>
 </ol>
 <p>When making a hole in a surface, the inside of the hole should extend fully to the end of the footprint. When aligned with a matching part, the inner frame will meet at the edge of the footprint and match seamlessly, as shown below.</p>
-<p><img src="../images/modular-design-geometry/door-snapping-anim.gif" alt="door snapping animation">
-<img src="../images/modular-design-geometry/hex-tube-snapping-anim.gif" alt="hex tube snapping animation"></p>
+<p><img src="/496aae7644ee8ad00c6e1aed82877e6d/door-snapping-anim.gif" alt="door snapping animation">
+<img src="/482d7796578b69ee9f344d6fb5b58936/hex-tube-snapping-anim.gif" alt="hex tube snapping animation"></p>
 <p>Here is a floor and a vertical bevel between adjoining walls at an outer corner. Because the walls/floors/ceilings have thickness, you need to bridge the gap with a bevel, corner, or other shape. Since the gap is uniform, you can reuse bevels across different surfaces, as long as they have a common interface.</p>
 <p><span
       class="gatsby-resp-image-wrapper"
@@ -698,4 +698,4 @@
           >
             window.___chunkMapping="{\"app\":[\"/app-25f52c5e9048763baf3b.js\"],\"component---src-pages-404-tsx\":[\"/component---src-pages-404-tsx-5deb6c84cd7c9a902125.js\"],\"component---src-pages-about-tsx\":[\"/component---src-pages-about-tsx-071b38ebf1e62ab6373c.js\"],\"component---src-pages-index-tsx\":[\"/component---src-pages-index-tsx-83e48b9e4f492d967859.js\"],\"component---src-pages-posts-markdown-remark-frontmatter-slug-tsx\":[\"/component---src-pages-posts-markdown-remark-frontmatter-slug-tsx-797c4d69d3db40702916.js\"]}";
           </script>
-        <script>window.___webpackCompilationHash="a3986353dfcfb42d3426";</script><script src="/webpack-runtime-d121a0e324fb05f57308.js" async></script><script src="/framework-39cfd3f0ffbe436ed19e.js" async></script><script src="/app-25f52c5e9048763baf3b.js" async></script><!-- slice-end id="_gatsby-scripts-1" --></body></html>
+        <script>window.___webpackCompilationHash="af804132b75fe94cff99";</script><script src="/webpack-runtime-446e8ee6f7b3034b50e8.js" async></script><script src="/framework-39cfd3f0ffbe436ed19e.js" async></script><script src="/app-25f52c5e9048763baf3b.js" async></script><!-- slice-end id="_gatsby-scripts-1" --></body></html>
