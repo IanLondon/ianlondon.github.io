@@ -1,4 +1,696 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Ian London's Blog: RSS Feed]]></title><description><![CDATA[A blog of software and other projects]]></description><link>https://ianlondon.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 01 Feb 2024 22:54:50 GMT</lastBuildDate><item><title><![CDATA[Escape the algorithmic enshittification of the web]]></title><description><![CDATA[Thoughts on more intentional online existence]]></description><link>https://ianlondon.github.io/posts/escape-the-enshittification-of-the-web</link><guid isPermaLink="false">escape-the-enshittification-of-the-web</guid><pubDate>Thu, 01 Feb 2024 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/e939ef95313dca6cac17ccde145b840b/2244e/wildflowers.jpg&quot; /&gt;&lt;h1&gt;The State of Our Online Attention&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Ian London's Blog: RSS Feed]]></title><description><![CDATA[A blog of software and other projects]]></description><link>https://ianlondon.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 14 Aug 2025 21:56:49 GMT</lastBuildDate><item><title><![CDATA[Modular Level Kit Design Considerations]]></title><description><![CDATA[A guide to laying out a level building kit for 3D games]]></description><link>https://ianlondon.github.io/posts/modular-level-kit-geometry</link><guid isPermaLink="false">modular-level-kit-geometry</guid><pubDate>Thu, 14 Aug 2025 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/45f823fda64ba107b47b26bf8d6fc22f/497c6/footprint-dimensions.png&quot; /&gt;&lt;h1&gt;Modular level kits for 3D games&lt;/h1&gt;
+&lt;p&gt;When building 3D games, it&apos;s standard practice to have an art team make 3D models and hand those models off to level designers to arrange inside a game engine. With a well-designed kit, level designers can snap together pieces like Legos and build interesting levels without needing every part of the level custom-built and inflexible.&lt;/p&gt;
+&lt;p&gt;This is a difficult task. Graciously, several experienced game industry professionals have shared some helpful resources which I&apos;ve borrowed from. I&apos;ve listed my sources below in the Resources section.&lt;/p&gt;
+&lt;p&gt;There isn&apos;t much out there about the fine details of how to go about building a level kit, so hopefully this article will be helpful.&lt;/p&gt;
+&lt;h1&gt;Outline of a geometric system&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;http://blog.joelburgess.com/2013/04/skyrims-modular-level-design-gdc-2013.html&quot;&gt;Joel Burgess and Nathan Purkeypile&lt;/a&gt; describe a footprint-based system that they used for several games including Skyrim and Fallout 4. The &lt;strong&gt;footprint&lt;/strong&gt; is just a 3D bounding box that every kit piece must fit into.&lt;/p&gt;
+&lt;p&gt;Joel Burgess mentions:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It&apos;s extremely important to note that the footprint is the full bounds of the piece, and not the traversable space of the piece. It is the imaginary grid that things line up on. Pieces always exist within the footprint. The only time a piece is at the edge of the footprint is when it is actually snapping together with another kit piece. Avoid the temptation to build to the edge of the footprint, or even worse, outside of it.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;It&apos;s like the concept of tilemaps in 2D games, but in 3D. Notice in the animation below how you tend to need a combination of corners and mid-pieces for nice intersections. And by repeating the mid-pieces you can create long objects like this clearing and lake. (Animated GIF from &lt;a href=&quot;https://fyrox-book.github.io/scene/tilemap.html?highlight=slice#nine-slice-tool&quot;&gt;Fyrox Game Engine book&lt;/a&gt;, a game engine written in Rust so it seems cool to me!)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/modular-design-geometry/fyrox-book--nine_slice.gif&quot; alt=&quot;tile map&quot;&gt;&lt;/p&gt;
+&lt;p&gt;In that tilemap of the clearing and the lake, there are only inside corners and no outside ones, so you can only make a limited set of shapes. In 3D, this is the same.&lt;/p&gt;
+&lt;h2&gt;A Visual Guide&lt;/h2&gt;
+&lt;p&gt;In my design system, for a kit I&apos;m building, I expect a 2m tall player. (This seems to be somewhat standard, in Unity at least). I found that 3m seems like a useful size to design parts around -- big enough to fit a door in without getting too close to the edges, and it sets up a decent standard ceiling height for the architectural mood I&apos;m going for. This is a subjective choice guided by blocking in various parts next to a 2m human model (&lt;a href=&quot;https://www.blender.org/download/demo-files/&quot;&gt;one of Blender&apos;s human base meshes&lt;/a&gt;, scaled to 2m).&lt;/p&gt;
+&lt;p&gt;The footprint is just a conceptual bounding box for a kit part. Here is the footprint visualized in 2 ways. The outside of the frame box on the right is a 3m cube. On the left, the green surface is the absolute edge of the footprint. In gray, the walls/floors are floating 0.125m away from the green border.&lt;/p&gt;
+&lt;p&gt;Note the XYZ axes convention: we&apos;re facing +Y, matching Blender&apos;s &quot;Front&quot; orientation. (&lt;code&gt;Numpad+1&lt;/code&gt; brings you into Orthogonal Front view.) It&apos;s convenient to have things with a front all facing the same way.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 108px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d74f8300ef309df2bbe1e73233a076cd/8eb6e/footprint-dimensions-axes.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 86.1111111111111%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAA7DAAAOwwHHb6hkAAACVUlEQVR42o2UTW8SQRjH+Q5+A2Ns0qA2Ul72ZeaZge4W6IJASgtpCbTWqClp7Vqq1cBBo9d68WDi1cSbF+/ePPil/j67CxVkS3v4Z5NnZn/zf15mEkopTEREoaZjM+sqDyVtEEvp/Pw6/5u4DjIjBolKF9LrMNSKNZD4/4RYELvRdhZ28xTJwR8sH/+CaBxC2Tl2rWf+TdzEGQVA8yGMp1+xdPI7lLl3EcaULlwNjHNIKoppEiC3htTxT6z2f4DWylAko7WxbgSUglOiPKRkJ1aaa9iD2NjhEmQuG5NVEoa6JmWt+cuwja0s2ud38OhxCmTasGsHkNUetDAheA/lCS/IQZcKsBmaiGt9VDdCTii03y+h/uYWnny6DbecgVE6QK7SgZAGLD7wda6IL0mB72kXLVWIdyhZLuvUdPGxbaP/4S6a/goa+/fhHbWxV96HnyX4nsbnXYmLFRPfUi7aE+D0PAXFNdm6Lx2MhIuB5WKkXRhBLQXB9QqoyXXUKzY6wyS2z5MY+Wl05RpEXMoT4CFveMfAIYNfCQemllzX6GDDUPB6GewM7qHaSqM1XAYVueMyrinEKfNPAbjPUJ9hbliG8QRodio11tYJ7bMH2H2bRPPZKned41rNp/xv/iKnwTjIy8NktJdjxOmrvILj8d0OR0vFj800OB+IpmCOB6v5EtbmCQ92iWMimlNFi6/e/IAHDTFhNY5g15/DbvTDrxJGtHbV47DwCQtemtI2rK2zULK4GcaiS6BDhcC52i16ziSn6FQ59coYpsO9lmVx5w2+nhJ/AZTSY+Nr6iG5AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;footprint axes&quot;
+        title=&quot;&quot;
+        src=&quot;/static/d74f8300ef309df2bbe1e73233a076cd/8eb6e/footprint-dimensions-axes.png&quot;
+        srcset=&quot;/static/d74f8300ef309df2bbe1e73233a076cd/8eb6e/footprint-dimensions-axes.png 108w&quot;
+        sizes=&quot;(max-width: 108px) 100vw, 108px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/45f823fda64ba107b47b26bf8d6fc22f/0d40b/footprint-dimensions.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.810810810810814%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAA7DAAAOwwHHb6hkAAACyElEQVR42m2S+08aWRiG+Z+6KgIDzIWBmWEYuXmh7WbT2ltSa7awhpomNd11syIg1Rrqdqu42yKtIgioWbPZf+3p4SQ2TdMfTr5kcub53vc9r+/i6j9qjVeEI2F0XcWMx0jYCeykTSqVIp1Lk5nPYOgGWkxHd2PEPBPNNYhYUay0hZ0Td2dT2K6Fb3h5xV+tv9ENHSUU4unaE3b7O9QOGnR7IzqXHRqf6jiujWpqaKYupyGgsZzJwv0F8rfzZG5m8OZm8J2dX9I5OcV2HKYn/RTXlmn9v0/9sMFp/4LOxRFbnSpW0iIaU9F0AVWFE8fE9BLEnTjByQCaphK3TXy94TmngxHzhQJTE1M8Ki7y7t89qod1CTwaHVFtVyRQFZGMYVokIoAG8XScZEosCoeJJ4ViK4bvuHdG92zE3Xv3mPhhgp8e3mLvvEmltclxd8DRoE3t/QaOABpxHc3QpBJ3zsWec8Q3kaUAGpaOaQvgm7fvGF5cUX62ytSNSW7eztE826FyWOFUZNgefmCz/Yd4LJOAqqA6GjHx4zhzZ94hagrFloaVFRkL277SyirHvQEbmzXUqIaXtmkOd1k/WOfP/RbdQZ/dT9uUt1aYmfXw+6eZDgUIRRW8gkcq45JeSJNIJoiIKHxevsDbw/esb2yKV1ZkdX7be0H9pEq5WpbQnsj4oLfPdneL0u9PcbMuwUgIN+/ipITKaJSwEpbTt/hoiWL5uajOP+RyefxTfrHVodbZoN6tUar+wqs3TYajK1rHB7xsPmfux6wEhEV2iqJIZWOYBLY/nlCpb/NBzLVf1wkEAgQDIQp3ZtnpN3g9FHbrJZZXHpPJz6AEg4SCoS+A6zOGSsvjDo5fenzG0Ew2K7cqQYUHxTssrT4k6VlikV9GEhW1+R7oWqUEfuz2Rbl7so8/F0tSpappwpYi1ASlPVXVvgC+BX1t+TOREwqCQcj1NQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;footprint dimensions&quot;
+        title=&quot;&quot;
+        src=&quot;/static/45f823fda64ba107b47b26bf8d6fc22f/fcda8/footprint-dimensions.png&quot;
+        srcset=&quot;/static/45f823fda64ba107b47b26bf8d6fc22f/12f09/footprint-dimensions.png 148w,
+/static/45f823fda64ba107b47b26bf8d6fc22f/e4a3f/footprint-dimensions.png 295w,
+/static/45f823fda64ba107b47b26bf8d6fc22f/fcda8/footprint-dimensions.png 590w,
+/static/45f823fda64ba107b47b26bf8d6fc22f/efc66/footprint-dimensions.png 885w,
+/static/45f823fda64ba107b47b26bf8d6fc22f/0d40b/footprint-dimensions.png 1175w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;In this series of pictures, I&apos;ll use this green cube frame to show the footprint. When I really go to build the part, I don&apos;t use this literal cube much. But having the cube in the scene can be a useful way to check your work! It&apos;s especially useful to check if you set the object origin correctly, which you can see as a small orange circle.&lt;/p&gt;
+&lt;p&gt;Here&apos;s the footprint of an adjacent wall and floor. Once again, the wall/floor is inset from the bounds of the footprint by 0.125m in order to give the walls and floors thickness.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c7fc96664dc64cfdc0cc2e73f7f2484e/4cdf7/footprint-example-wall-floor.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 66.21621621621621%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAA7DAAAOwwHHb6hkAAADJklEQVR42k2TZ1NbRxSG9a88yQgVEAhx1bvuVblCDUFwLMA2Dt0FsME2zMQGgjDCFNENEk1AQpI/9vggnJl8eGdnZ3ef8553dw2uSBwlpOEIxPDFddRckWimQLS7QFjP4tVSTfniSVEKZ0TlyfAoerGfTn+ItvYOTCYTZrO5KYMrksAZjtMVjOGPpwXYJ8BeURFVwKGkjk/TcMfiuKJSPKyi5XvoKw1iNBox/w9mtlgwuKNJqSrAkNp0oWXSaN0JcRchqocJJXwEkgqPn/VReFJEy2bwqEn6BoZot9mwttmwdToeZHf8B0zgCmtoqRi9jzPk8poojZ7NEhOoL6Gg6SFyvSGKJU1cq4TTebREsgnp8gawu7x0KG4MHgHet+2WVpLpJOWvO0zOzMuhbnI9eVQ9KBk6CSZ0yTmKNxIg35/HJR0FVE1Abqwddqx2O60yGjwxAQpUCUbp6S1wVDujftHgxcsZtHSGaCKMElHwqjrBZFZgPTx/McTY3BSpos6jlkcYLUZMdhOWNsuDw/u2Hb4QIyPD1C+vOa6dcyrQ8clJAhEPjlAnXffuBFp6ViJfSDM6N0lp5Ck/GX/GYrJgtpkxtZofMrx32OWPsLDw/gfwjL3jU3b3dnn+2wBmRarb3U3g+KsJsrkUI28n6B+WNYfA7CLFgrXdiuF+k7OZocZaeYX61a3omo3qPt+ODlla/kgwFSDXP0jmlwFGp8Z4OT3B9PwHZhc+svRlTeIZo8uj0NJixGBz+pthB+VRl1eX2BNXlco6a7Lx8OCA1fInXs+Pcbh/yNbWFl9kXl5fobp/TGVzhz/Wv7JZPWB86rUAWzB0uvy0drrocPoIx1SeDg0yN/uG5aXPbG9X+bT8O28Xpzir1bg6P6VxdcnB8QnljU3OGzesVjbZ2N7l+q+/mX03j2F9a4fFzytMvJqh99choskMbnGsePx0OBScbidqPEamUGRq+h03d/82L232wyLLaxVuBHQmEdUurri9+wfDwbfaw62eXTZ1Ur/gRMaKVFXlPzuDavMVtEonVsXDm7n3NP684+L6lurhMUen9Ye5uK1fNvgO5YxXiEJ8HWsAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;footprint example wall floor&quot;
+        title=&quot;&quot;
+        src=&quot;/static/c7fc96664dc64cfdc0cc2e73f7f2484e/fcda8/footprint-example-wall-floor.png&quot;
+        srcset=&quot;/static/c7fc96664dc64cfdc0cc2e73f7f2484e/12f09/footprint-example-wall-floor.png 148w,
+/static/c7fc96664dc64cfdc0cc2e73f7f2484e/e4a3f/footprint-example-wall-floor.png 295w,
+/static/c7fc96664dc64cfdc0cc2e73f7f2484e/fcda8/footprint-example-wall-floor.png 590w,
+/static/c7fc96664dc64cfdc0cc2e73f7f2484e/efc66/footprint-example-wall-floor.png 885w,
+/static/c7fc96664dc64cfdc0cc2e73f7f2484e/4cdf7/footprint-example-wall-floor.png 995w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;A complex bent catwalk part inside a footprint. The ends are exactly flush with the bounds of the footprint. You can check this by looking in the properties of the verticies and confirming they&apos;re at 1.5 or -1.5 in the corresponding axis (for our 3m cube footprint, the outer boundaries are 1.5m from the center).&lt;/p&gt;
+&lt;p&gt;Note that the position of the object origin here is following the half-off-center convention I&apos;m using for free-standing panels, described below. On the flat catwalks to the left and bottom of the curved section, the catwalk platform is centered about the origin, offset by 0.125m to align with the floor and ceiling planes.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 542px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/07a9b4b97b0c4584f9301390cba1c520/c0388/complex-part-in-footprint.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 90.54054054054053%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAA7DAAAOwwHHb6hkAAADwUlEQVR42l2UaXeiWBCG/VeTREUxiiAgiCJuCCqJW1wS4hbNZk86ezqmZ/rMh57f+k5xTXtOz4c6JV546q1bSygeiyEe/924KAdRFaGYCvMpScBh6hAxOotGolsLRxA52Fo0EkGMOIGFIvRxmF4Ik49Eo8ziCR6t5REKTROGk0eefKFVRPHIIish3zChVw1kSxoyOQUCBQyCMaAlp2Fm0tDFFHQpDfEwiXxBgnfhEjyG/b0DcBwHno+Dp0CBUiEjQNIzZDLMIwNH1x6DRklMaFjOY9Wq4dw2MbJ0TMj3XfLLJvotUqYI4CnyAaXGRbhdyuG9MAQ1Ad3OoECKJS1D10DAek7FSbmAYb2C04qJ+7Mu/FEFN1/7uPZrWC8aWPpVOGUVh3ISgpxCIslDKabpGjQWhKVuyIjQvYYUOrQUCa5lwlXSWPvHEEpZzOYu7nwXXxctrC88TLtFLGYO1HIWpW4JppdnSoOiaGUdcl5hv0NXvo/5+BSryQTT9jEer+ZwW1XMpzU8jAoYNYoYe1VcD2yc2DqGdg6iLjFIUOkgzaylUUdkt8CHx3s8PT/j5fUV37694+l1g83LA9bvl9i8veDP+RA9t4CTpoXbcR0DW8PivA6lrDFYkKZKQLX4CaxqAuyciEZBRrOoot+wMB1U4V8dYzY9xdPbBx5uVxg4Onp1A5e9Cs46RXiNPPYPtgpV+i6AMuAB3cPO/thHRheRq2mw+yXUczyGnSruXzZ4Wl/Cs2QMHQN38yaWUwcJqn6YIEpBQbb8CdxNCk9TQM2dKajUCgaKnTLCFL2sJzHoOXja/MCV30FO5OE1DYzGFVQ0EXv7YQbUKvq2yr9G5tdYKSYBazkU2xaLGPRfnRp9uVri5fkVYiKOIwp4e+5SkTSmUAqKVM2xIv0G5Agok8LgsDay2USkaJKUrIDJ7AQP3z+worYaULDVtIFz8ilqO8lQ2Iiyxg7GKsbSjrM/DIrevfHQmLmokwpn4sL2bczWfTxubnC28GCPLHx5G+LyroPOhYP6xKHmzrIMQ2KaNslhggEDuCAloZVUalSZ1MrsCuS8iMVZD3/9/ROL6RhVz8Ji7OCUvKGlEaNriHGfy0ES0xCEFBtsBg22DltJn2sqeN7fw6jTxsc//2I5GqJhaJjWyzT7OWQSie2G+rW+bKeBk7EPr90jpUlwMY6Bd8bzFCSM036HARf9LiqygJlbgl/LQxGSCFbgDlhzXLz/+Inlzd1O5f+BsWgEZwT6TsBxu410MoGuZaBj6tBEWluULv/5/n8im81hWl6UxQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;complex part inside footprint&quot;
+        title=&quot;&quot;
+        src=&quot;/static/07a9b4b97b0c4584f9301390cba1c520/c0388/complex-part-in-footprint.png&quot;
+        srcset=&quot;/static/07a9b4b97b0c4584f9301390cba1c520/12f09/complex-part-in-footprint.png 148w,
+/static/07a9b4b97b0c4584f9301390cba1c520/e4a3f/complex-part-in-footprint.png 295w,
+/static/07a9b4b97b0c4584f9301390cba1c520/c0388/complex-part-in-footprint.png 542w&quot;
+        sizes=&quot;(max-width: 542px) 100vw, 542px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h3&gt;Floor/wall/ceiling thickness&lt;/h3&gt;
+&lt;p&gt;There are two big advantages to giving walls and floors (and ceilings) thickness:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Two walls back to back with no thickness will coincide, causing &lt;a href=&quot;https://en.wikipedia.org/wiki/Z-fighting&quot;&gt;z-fighting&lt;/a&gt; as they overlap each other perfectly.&lt;/li&gt;
+&lt;li&gt;When you make a hole in a wall/floor/ceiling, like a door or window, the wall needs thickness. An infinitesmally thin wall would look like a glitchy mistake, seeing edges of planes in 3D ruins the illusion of form and space.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;When making a hole in a surface, the inside of the hole should extend fully to the end of the footprint. When aligned with a matching part, the inner frame will meet at the edge of the footprint and match seamlessly, as shown below.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;../images/modular-design-geometry/door-snapping-anim.gif&quot; alt=&quot;door snapping animation&quot;&gt;
+&lt;img src=&quot;../images/modular-design-geometry/hex-tube-snapping-anim.gif&quot; alt=&quot;hex tube snapping animation&quot;&gt;&lt;/p&gt;
+&lt;p&gt;Here is a floor and a vertical bevel between adjoining walls at an outer corner. Because the walls/floors/ceilings have thickness, you need to bridge the gap with a bevel, corner, or other shape. Since the gap is uniform, you can reuse bevels across different surfaces, as long as they have a common interface.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ce1719da6831a7398a60d1e24bc6f97f/23296/footprint-example-wall-bevel.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 89.1891891891892%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAASCAYAAABb0P4QAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAD1ElEQVR42n2UaVdTVxSG86v6rVogJJDc3Cm5c0LCEDDBFCwNoCCCDGGmFQpCUbKIShVssBQZrKurXf1fT8+9AUtXhw/vuud8uM/Ze79771DMcImlHNqTQrpNm27RpplEfakGUcVAdTpwugrYnX0k013inkX1OtDS2Ya8K4lzKB4AG9CYgMb0BrhdswTUIKxqtJkpYq5BxFbpuz9A9+CXKAIomR6KeOwT0AuAXgBsT9m06jrNukyTKnFbiXFLaeeW3EZzKoHkOUQ9leLkAMOzE5Tnx+gfH8Lpzf8TGE95RE2DZluiyYmJb5wWU6bV0IiIRzQnjZHrQcqaWHc7iKZSxD0Dsz+NWhSlcTSSmU70TI6QH7YPjDkWkuOn3Ii2zTAEUCdiKNi2gpx2aPVk3MEckmsLOUiWKI9pERaP+6lLlnsDaFvEbbtRv8AYIVWcVRMvpbO4uk7f8CDpgW6czgK6lxMGdaK4Gb7QYuhuFktkIYDpfwFeu+1DDTKWQe3lG5a2vsEqZjGzeeKGI/5zAmDEUhmdeMz41PQV0LgJvNE+QhE5SU+HR/3dKZWNZQamyti5XtFmZgBN2KJEbpJHMxUGhsr/H6GfequkMVjo5ezsksnVOVafP2FepN+q6DS1y0TUJFLGZGZ+mUJp4L9q+BcwLIAz4w+4+PArk2sVFrZX+On0gky+wGeftwiwhtblsfLtBl29hQbQj9J3LeG6SEFf+k3eMCci66zMzvD+/GMQYWVribOLj4xMTOHm8rjdecx8B0tr60xXFgm1xBSa2xWa5ESg21GZcEInLGrXKhyO6yZPl+f5/bc/mF1fZGFnNYDvH7zh4PBHqq9+YHTuES8ODtmt1ghtPP2e7d0q43MzlEaG6S99hWF76HoS2xKNbFkUxDRMPJyg716escoom+sb7Gxvsfu8KvScycUp3tZPePfze0KPRTEfTM4yNDrM+toc+3vPqFWfsV+rsbf/ku+2dwMTpufX6C2XKD28R7E0RHdfkVJ/ga6MhawquJ29dBfuEoqKXgvLKbFZTHKiqOX7YywsLbO5uUltv8rR4Wvq9Tpnp++ZXJlmfmuBy/NzcT/h8vKS4mCZTE+RlBi9sJIkFKwtId/VsCzmOZGkRdTPN8fM9pC/O0hnvo9Mrov74yMcvj3g8sMvHIv0Ts4vSPfcEcA7fD02IWqvXQOFo0mr8b1q6KiaCoxpEW3TLImZFnvRH7ed6gsBO+ew/o76ySmloRGK98oC+IiE6fpA+2+Lte16sfrSjE/niNKAP9naFn14ztHxiYAes7W7x17tFS9fH/FwusKfd2YalDL6YpkAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;example wall bevel&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ce1719da6831a7398a60d1e24bc6f97f/fcda8/footprint-example-wall-bevel.png&quot;
+        srcset=&quot;/static/ce1719da6831a7398a60d1e24bc6f97f/12f09/footprint-example-wall-bevel.png 148w,
+/static/ce1719da6831a7398a60d1e24bc6f97f/e4a3f/footprint-example-wall-bevel.png 295w,
+/static/ce1719da6831a7398a60d1e24bc6f97f/fcda8/footprint-example-wall-bevel.png 590w,
+/static/ce1719da6831a7398a60d1e24bc6f97f/23296/footprint-example-wall-bevel.png 675w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h3&gt;Bigger footprints&lt;/h3&gt;
+&lt;p&gt;What about big parts that don&apos;t fit in a 3m cube? We can make a larger footprint, and things will match up as long as the bigger footprint is a multiple of our &lt;code&gt;3m x 3m x 3m&lt;/code&gt; base footprint. The object origin should still be placed in the center of the footprint, and the offset is still 0.125m for floors/ceilings/walls.&lt;/p&gt;
+&lt;p&gt;Here is a 6x6x6 footprint for a large opening.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 567px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b831a7f1ba7be1423e08f1b7925aec34/8710b/6x6x6-footprint.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 101.35135135135135%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAEB0lEQVR42m2U61sSaRjG/Yf8tILDDMyB4TwwHAZIBAuyEFzykCSZ7lqWqau5rBmYulqrpqZlZu56eflhP+z/de8zLxHY1Yf7ehmY98dzvDskSUJTiqIwybIMieQNRZDqz8MXDMFht8MfjiKayUFL9sKl6ZBEEe33TXV8exAlCILAZD47nU6obg+M3pvw+P0M6PZr8MWSUPw6XIHQNVAzCAYUCaaqIlKZFAwjzmBWqxWWrp/A8XaoWgQOekdSPVACYdhdfgTCMciKE6KkQKJTIQmi82uEokxAAaubNZz9fYmtv3axslrDeKWCXC4NPR7BQKmAsUoZsVQSeoJSJwVDXmi6F4GgF4rHC9GjNVOW4ZB4VOsvcPzpHNXVOmZm57HxZgcXV1e4PzFJqSYQoHQ9egweis4dNk+jId1AqCeNQLynBbQ7bFhamcfHswvkC0V0dnaiJ9uP0/N/MFSZgCeagBqKwtUmNdiQKxRDJN2HWOZWAyhTHQQ7h/nlWewfn6I3nQbHcQgnU9g5PEJhpMya4dKvA5ty6ybwFoybOQLKBKRR4e3dmF2cwdbOPnwBs6sC3FoQy5T+ndII/Ebyh7CGItCiBjTDaAFtggVPF6axWt+gjjpoDKj71O3p5wvIFksEvAE3XfwRUKERUlQnbDL/NWWZgLwF5cn7ePTLEzZzDocdkVic6voKN3J3oCVS14BmmqbYZxr4/lIRA0PFVlMk6rKRNpAbKEGlyASeR5a2pFpfh9GXg96ToYuNrpog2R9iMyl6NURSfahvbmN9800rQruDQ/5eP26XRhEK6bDZOBRKw3jxso7M3SKtWgQ2yQVe8UD2BZHIZNkW6RR5nt5b33qL2vqfLSDPW1GeGMbY1BOEYwYNuoqZuUX8QREOUpfT2bvQjR4Eo0kk0lncG6tg+MEERiuT7LN5jow/aquhzYLK1CieL68gmy+i9noD7z+e4vD4BI9nF7BzcIRd0odPZxh68BA21cvSNiV6gzRSMUh0tkXYTf84iO29AzZ3KxTZ6toG1qg2c0u/s3U8IPiXi0uUyhVIlLZZz2aXzdP8rlVDnkNpNI8vl1fs4lsC7+wfYe/gGO8Oj/Hh5Awnn8/Z5hRGxiAyYJxF5tTCtDEReCPxti7T7IVifvxcHkFlegozv81h8WUV1bVXqG1tYvvdHrZ2d/H+5BS3C4MQFJVZmGrOoE+DM0CWRtCOdk9z2B3o5rph6bagy9qFLs5CliSAEziMPhxH9XUNv84/g+yVYbFbwEkcyQaefECkoORmDdtNsunaTFQKJ/mc1WLBzLM5XP37H+YWlmhGBfYb81JJpM0i8yUzNp2o43sL/14mmKOoHz+dxRk1pDeTAW+zNRz623sye/bpMfwPvZwxyhjjNAYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;6x6x6 footprint&quot;
+        title=&quot;&quot;
+        src=&quot;/static/b831a7f1ba7be1423e08f1b7925aec34/8710b/6x6x6-footprint.png&quot;
+        srcset=&quot;/static/b831a7f1ba7be1423e08f1b7925aec34/12f09/6x6x6-footprint.png 148w,
+/static/b831a7f1ba7be1423e08f1b7925aec34/e4a3f/6x6x6-footprint.png 295w,
+/static/b831a7f1ba7be1423e08f1b7925aec34/8710b/6x6x6-footprint.png 567w&quot;
+        sizes=&quot;(max-width: 567px) 100vw, 567px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;In a tilemap, something twice the size of a tile would be split up into 4 tiles that compose together to get the 2x2-tile part. But in 3D, it seems like extra work and problems to split them up only to merge them again.&lt;/p&gt;
+&lt;p&gt;It might make sense to use a 3x6x6 footprint for this part, which IRL would just mean moving the object origin 1.5m closer in its 3m dimension.&lt;/p&gt;
+&lt;h3&gt;Free-standing panels and other exceptions&lt;/h3&gt;
+&lt;p&gt;For something like a balcony, it&apos;s tedious to position a floor and then position a ceiling one footprint-unit under it. When we have a section of floor with both a top and a bottom, I think it&apos;s okay here to keep the origin in the center rather than choosing below the ceiling or under the floor. However, if you want to have the ability to mix-and-match different floors and ceilings, you might as well keep them independent and have them offset by 0.125m from the bottom and top of the footprint respectively.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/f02e10e1e84f96a4598ce64b7a0f6043/7131f/panel-with-thickness.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.13513513513513%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAA7DAAAOwwHHb6hkAAACiElEQVR42oWTaU8aYRSF519ZEZiFRXaZ1qC1Ii64tVVbjalam3RJ2hi1SlFQEAE1CgooIrj0xz19AW3QfuiHk5nMnPu8Z+69I6mqylNpmtaQoihoqoZFs2K12XE4HeK5islkbr6797XWSa2ARwZR4PJ48D3XedEboC8UIjwaJhgMEggEcLncwtc8tDWM9G9CBafuwuH3MDQ5yrvFBZZWvhBJxtiMR5lfWmB2bpZweJiBgX50caDVav0bRGqNa2g3MDI+QjKfIH6QIJvPky9cEknF2NiLs5lJ8n1ng/VYjB8rq7ydnmZ4ZJjOTrtogwmLxdIE1m86Ojp4PTlJqVKiKFS7KXNUTLMaX+fnzi+iuxFSmTS7mSyRvT1yxTL7Rydsbsd5MzUj+uvCaDQiPcBGx8a4ql1xc1elWsmRPyuxnU6I4h2OcgWOT885LZQENEU8nSJzXCCRPSYr3h3kikQT+3z4+Ampvb2d8YlxKrWqAFa5+31DXEDSqST5ywJb2RSpwxPWtmK8n1+kpyfA1MwEJ/kcF9Uq2ZMzARetKV1wXCgj1WGX1auGbu+uiSYzdA2JvnjtrKwtM7M4J6bai9fvRu/zYnfbMMgmdI+br5+XReo8h6dFlr6t8nJwDOn8ssxFpcL17TWx/UMcej8u3Ym/V8fusOLw2TAaDMhmGbvTTl+4VwzBhmw009b2jO5unZAIYDSL/az3sFQuU7uuEUsdCFgfsmxuFHu73AxOBPG/0tEsKtZOC6qmYJabS62KBdcsWmMQRjEDTW0uulQRn1qHebqDyIrcWFZNTF4xmvC5nbh1N7IwK3Xdg+rXBz39W6RoPImvJ9SIaxEGm6xgrRuFZFnGbJIfAf6nPzpdDK8x5hFWAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;panel with thickness&quot;
+        title=&quot;&quot;
+        src=&quot;/static/f02e10e1e84f96a4598ce64b7a0f6043/fcda8/panel-with-thickness.png&quot;
+        srcset=&quot;/static/f02e10e1e84f96a4598ce64b7a0f6043/12f09/panel-with-thickness.png 148w,
+/static/f02e10e1e84f96a4598ce64b7a0f6043/e4a3f/panel-with-thickness.png 295w,
+/static/f02e10e1e84f96a4598ce64b7a0f6043/fcda8/panel-with-thickness.png 590w,
+/static/f02e10e1e84f96a4598ce64b7a0f6043/7131f/panel-with-thickness.png 710w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;I ran into another exception with these stairs. Notice that the stairs themselves because of their slope don&apos;t quite fit into a footprint, and need to align with floating floor panels. You can see that the footprint cube is offset by half its height (&lt;code&gt;3m / 2 = 1.5m&lt;/code&gt;) to match up with the way I&apos;ve aligned the floating floor panels.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9edea9bffdd6f6138417ae97a9d0ec9e/90712/stairs-messiness.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 68.24324324324324%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACy0lEQVR42o2UaU8TURiF+7fsMksXSktLoXbByFKgAhUxijFBAwYTE0CsiRtakLXQlma6QGnLomKi8W893jttDRg/+OHM3MlMnnnvOWfG4nQ66UjTNFMOh4KqauiajiLWmlhLqYqKItR5Xtd1U1fXFnkhH5IAj8eD3+8jHo+SnBglkRwidjtM6GbQVG84QCDUY7706iAdmAmUsIGBGA8f3mdWaG7uEZnsW9b23pHOrLL4aoE705OkZlPML80x/XgSr8+Ly+X+N9ChKKSmJki/XiWzvk6ueEDWyPM5WyBbLGAcFyjW8hj1AvuFEpm9bTa2NhlNJLDesJq2XNuyqqrMzz+haBSoHB9xclanUitRqVbZOcizsb1PpZKn0TA42NlkI/eR58sL9EVC5vb9gW40veW3CZQH6YnH4yIWjTAzM8nL5XnevF7mtF7itHFM3siRO8mRPdxjZXVBBGTD6/cSCgfpi4WYeDSOu8tthtYG6mYoNpsdq81KsN+PL9AlPB3na6NM/eKEYjNLuVmiemqwtPSUcDSIv7eHkdQwYzNDuMVAcjBLa1ytFb9LJO5QSd4b4f7Tu3T1eImGgpSLm1z8qNNoNigfVzm7PGc/+4nZJynGZxL4ekVIbhfSPouzDdM6EtfyZqDXz814H5Fb/UzdG6bZ3Ofy8ovp86FhUK0esbuzxq3BML7+7lZXxXAWlwC4JUR2q11sKUWk3yq1avp1ezDC5lqan7++c1gqUxRqfKuxvfWB4ZG4+BgcrVA6AL0NdHUkLRCSRnd5PUzNJumPh0i/eMbPH99EvUqiSkWaF3VSyVHhvc2szx+glPoXXE7uVMTZqTP1YIz4YFSU2s3S4hxfzpscXdR4/34Fh91Opy3XgH9LbcN1+R1b7QT93URETcKxgFmto9ouMTG11fo/QOGdCRVnc3K9/dOwC6+EDbqqEPB50MS6E6YE/gbnelGkTV/nIwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;stairs messiness&quot;
+        title=&quot;&quot;
+        src=&quot;/static/9edea9bffdd6f6138417ae97a9d0ec9e/fcda8/stairs-messiness.png&quot;
+        srcset=&quot;/static/9edea9bffdd6f6138417ae97a9d0ec9e/12f09/stairs-messiness.png 148w,
+/static/9edea9bffdd6f6138417ae97a9d0ec9e/e4a3f/stairs-messiness.png 295w,
+/static/9edea9bffdd6f6138417ae97a9d0ec9e/fcda8/stairs-messiness.png 590w,
+/static/9edea9bffdd6f6138417ae97a9d0ec9e/90712/stairs-messiness.png 882w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Is this breaking the geometric rules of the footprint system? The Joel Burgess Skyrim article says:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Level designers tend to build on a grid snap setting of one-half the size of the footprint.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So I hope that hints at the need to sometimes switch between aligning to the face and other times aligning to the central body.&lt;/p&gt;
+&lt;p&gt;The stairs arrangement might here end up being a bad design for the kit. More experimentation is needed...&lt;/p&gt;
+&lt;h2&gt;Design standards for the system I&apos;m using&lt;/h2&gt;
+&lt;p&gt;FOOTPRINT: A &lt;strong&gt;3m cube&lt;/strong&gt; looks good for a typical window, doorway, and ceiling relative to a 2m character.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Many parts will fit in a single footprint. But a tall pillar might be 2 or 3 footprints tall (6m or 9m respectively). As illustrated in the tilemap animation from before, you can often avoid setting the heights of longer parts by making a middle part that tiles and one or more end caps.&lt;/li&gt;
+&lt;li&gt;In Unity, when snapping parts to the level, you should therefore use a 1.5m grid to allow for half-sizes and half-offsets.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;PART ORIGIN: The object origin should be the &lt;strong&gt;center of the footprint bounding box&lt;/strong&gt; for each part. This is generally NOT the center of the volume or mean vertex position -- you have to be aware of the footprint you&apos;re building in and place the object origin so it&apos;s equidistant from sides of the footprint bounding box. In most of the 3D images above, you can see the part origins visualized as orange circles.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;As pictured above, free-standing panels are an exception to this, they can have the origin centered between in the floor/ceiling or wall/wall planes.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Why a center origin? It allows the parts to be freely rotated without having to move them after the rotation. If the origin was in a corner or the center of an edge, rotating a part about a corner moves its center. That can be confusing and annoying, especially since I&apos;m trying to support a game where levels don&apos;t have a fixed universal &quot;down&quot;/&quot;floor&quot;. If I didn&apos;t have that concern, the origin could be on the &quot;ground&quot; in the center, or in the center of the edge where the ground meets a wall, which afaik are conventional in modular level kits.&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;STANDARD FLOOR/CEILING/WALL WIDTH: &lt;strong&gt;0.125m&lt;/strong&gt;. One subgrid unit (0.25m, below) is good for many things but since walls/floors are back-to-back, that would mean 0.5m total, which is visually too thick. So our standard width for thicknesses is &lt;strong&gt;0.125m&lt;/strong&gt; set in for each piece. That means in a 3m cube footprint, any axis-aligned flat surfaces (floor/ceiling/wall) should be 0.125m away from the matching plane of the footprint cube. Unless they&apos;re a corner part or pillar, they should generally run all the way to the end of the footprint flush against the edge of its bounding box.&lt;/p&gt;
+&lt;p&gt;MARGIN: When you print a document, it&apos;s good to leave a margin so that nothing will get cut off. Similarly, when making a panel that might end up intersecting a perpendicular wall/floor/ceiling/etc, it&apos;s good to leave a margin so that when you add that wall/floor/ceiling, it doesn&apos;t clip your new panel in an ugly way.&lt;/p&gt;
+&lt;p&gt;SUBGRID: &lt;strong&gt;0.25m&lt;/strong&gt; optional grid. The subgrid is a finer-resolution grid that is optional to use as appropriate. It should be used to align things like trim, recesses, inset panels, and so on, across pieces. Given that the footprint is a 3m cube, 0.25m grid units is nice because it&apos;s 1/12 the cube. 12 is a convenient number, it gives us the ability to align to the subgrid evenly with many fractions of the footprint: 1/12, 1/6, 1/4, 1/3, 1/2.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The subgrid isn&apos;t a strict rule. It&apos;s OK to use half of the subgrid resolution &lt;code&gt;0.25m * 1/2 = 0.125m&lt;/code&gt;, when needed (like the wall/floor/ceiling width), but try to stick to 0.25m when you can for things like trim or railings that need to line up with adjacent parts.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;GREEBLES: Stuff like keypads, small vents, debris, and other non-integral detail bits don&apos;t need to be placed in a footprint. It&apos;s often nice if their main dimensions can line up with the subgrid when possible. It&apos;s usually most convenient to put their object origin on the center of whatever surface snaps up against the wall. A table&apos;s origin could be the center of its bottom plane so it snaps to the ground, a light switch&apos;s origin would be the backmost plane where it&apos;s flush with a wall, a ceiling lamp&apos;s origin would be the top where it snaps on to a ceiling.&lt;/p&gt;
+&lt;p&gt;CHARACTER DIMENSIONS&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;2m tall&lt;/li&gt;
+&lt;li&gt;Know what height your character can step up vertically. Eg maybe they can step up on a surface 0.2m above where they&apos;re standing like a stair or low platform. Anything higher requires jumping.&lt;/li&gt;
+&lt;li&gt;Know your minimum traversable width and make the narrowest passages a little wider than that.&lt;/li&gt;
+&lt;li&gt;Know your jump height.&lt;/li&gt;
+&lt;li&gt;If your player can crouch or crawl it would be important to note the lowest height you could traverse in those positions so you know to make crawlspaces a little higher than that.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Summary:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;The footprint is a bounding box of an exportable part. It should be in multiples of a 3m cube: 3x3x3, 6x6x6, etc. Even if there&apos;s a lot of empty space, I&apos;m not sure if it&apos;s a bad idea to do non-cubical footprints like 6x3x3.
+&lt;ul&gt;
+&lt;li&gt;Tip: to make sure the origin is reasonable at a rotation point, try rotating the object 90 degrees in different axes and make sure it winds up aligned with a 90 degree oriented &quot;wall&quot; without translation.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Walls/floors/ceilings/etc, in other words planes that are coplanar with a side of the footprint box, should be 0.125m away from their side of the box. Since the origin is the center and the side of the box is 1.5m, that means they should generally be at 1.375 in whatever axis they&apos;re perpendicular to (&lt;code&gt;1.5m from center to edge of 3m cube - 0.125m in from the edge = 1.375m from the center&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;In general, leave a 0.125m margin around walls/floor/ceiling panels because that&apos;s where other panels will often fall. However, you should scale the plane out to exactly meet the edges of the bounding footprint -- just be aware that adjacent 90-degree panels can intersect into that margin area.&lt;/li&gt;
+&lt;li&gt;The subgrid isn&apos;t a hard rule, but just a suggestion to make things line up and be more cross-compatible. The subgrid is 0.125m. But when you can, try to stick to 0.25m increments when so things match up more easily.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;More concepts in modular level design&lt;/h1&gt;
+&lt;h2&gt;Interfacing&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Interfaces&lt;/strong&gt; are my term for the area where two kit pieces match up, along the edge of the footprint.&lt;/p&gt;
+&lt;p&gt;Like tiling spritemaps in a 2D game, or textures, symmetry makes things easiest.&lt;/p&gt;
+&lt;p&gt;For parts that run along a straight line like a wall, it&apos;s useful to have left-right symmetry. You can do whatever you want in the middle in different variants, but as long as the interface is symmetrical they&apos;ll match up. Below in orange are the interfaces for this wall part.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/eaa2af23b95cbaa7d31c704a54bf437e/2e195/interfacing-edge.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 54.72972972972974%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACvUlEQVR42jWTW08bRxiG92+FJJYQpDdNT2kVyddNe0PJRamqIGhCQoCAIbYxOLZ3jb273rO99tqsD2DsGAg2JK2aVvk9T8Zb9eLTzGj2fb53Zt6VRsMOZ6fHnPRa9ESFYQNVV7EcG9t1aAR1gmadql9DNywxb+AHDSzXZSed45fHj/n6wbd89cM3fBf/Hqliu9EHzeOAZqtJtxvi1mqs72VxbR3PNdBVBVnJsfDbKo6u8H58xqAfspF6w9Lvy9yeuUXsboy7t+8gJfYPGV/2o7p42+Pq4pROu86Tl0ny+SzdRgW/ZtPwTZ6+SrKxvcvNZY/31yNkVWc7o/Do0Y/cEtDZ2Vmklc3XOK7N5Gogasjk3YCzfputdJ6tVI6LQcjF6IR+r0lOKbL6ap9W4PHp44QgqAlggUQyxb35OWKxGNL2foGi6HQzHvLxrys+iM5vBx0KJZWnOwdUqzbX76buO5TUEs+202RyMteXJ2TyMqtbr9l7U2RhcZGZmRkk3TAoaVrk6t+/x6ImDAUwKys8TxwIUZHxeRe1LLO0ssbyeoKVjT1MU0e3LFJZmRe7WTYSSeaFS0nVdeRSmWrNi4Cf/rlGKR2xurnL2s6+gGaoeVb0ONmCTPIwz8pmimTmgKtRh36/J9LRptXyuX//SyTNqKCUyxypmrjo8whqOA6HcpmXewcsb6ZJZ/P0uz7HYYDn2ZT0CgVxn4GI1PRkHyZnXA5D5uaEQ6/qisyZkWgq+PPmPIpO/7QdRUnRTIpllcB3KFdM0VxHNWxxXJcj3aJUEe7rPvVGlXg8jhQEPn69im4aolvIzWQUhbfq+1EeLVfsWU4kVE0nAmlirYm54XjY1RqKbkaJ+GnpOVJ43KDdbqJpR7xYXyMny+i2J9xYkRPV+E88hf4Pmo66+CEyhRK//rHDw5+f8EV8kfmHC3wG+7lz3/mp7g4AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;interface example&quot;
+        title=&quot;&quot;
+        src=&quot;/static/eaa2af23b95cbaa7d31c704a54bf437e/fcda8/interfacing-edge.png&quot;
+        srcset=&quot;/static/eaa2af23b95cbaa7d31c704a54bf437e/12f09/interfacing-edge.png 148w,
+/static/eaa2af23b95cbaa7d31c704a54bf437e/e4a3f/interfacing-edge.png 295w,
+/static/eaa2af23b95cbaa7d31c704a54bf437e/fcda8/interfacing-edge.png 590w,
+/static/eaa2af23b95cbaa7d31c704a54bf437e/2e195/interfacing-edge.png 782w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Here, 3 parts with the same interface can be combined in many orientations thanks to their interface symmetry.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/914ad9ccb6697b97d6723481854533a6/bf433/symmetrical-interfacing.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.13513513513513%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC9ElEQVR42k2T21NTVxTG8xfpY4JAEsJYp44601LtONbLVKvCcEkQHlqmM0WZEpKTO7lAQEiAcE1Ics7JXSIkIGin4+j49/xc5/jQPnyz1tp7r+/71t7nWOx2Oy6Xi5HhZzx98oBH93+W+JCJ8TGmp6f5Y2aG32f+lHyK8bFhRkeHeeEewz36GxMjv+IZfczY8BMc9n4cDgcWg3BwcJBwSCEe8RHy/UXYP0siprCynGR1JUlmfZVsZo30cpyl1CLZlRjpVJTlZITsWopENCCEfULoxHLlSi937tw2D4YCXpSFV/jmZ/F7Z6WeJ+CfIxbxs7SUElE/0UiARRGOBuYIBn0kkgkRTvDTDzfo7e3DYrPZmJz0sC4uImG/SagsvETxvSIqdSS0QCoZIxYNEg56iS+GTeLF4BwhRUjFhGHGPfIYm60Hy7Vr36H4vaymU2ZjPBY0nYWVv4nLKMbYGRl3bSnB1us0B9tb7G5lya2l2VxNkHmdIiMxEZ7nxvdXsdz75R57e3sc5PPkCwUOBPs7O+zmcmxvZFHLKpV6i5JaoSJ5tdZE1evoqk65qJrrWqVOQfpv/3gLi8PuYHllnebRCWqlKZsN9LIclljSatQrNWqNN2i1lrln1KoQVLQKZb1BUa2ZvV5fAKvVJndotfL02XNaBqEoayVNVKvS1ECtNtF1Ia02yMt6vqihiaNmtU5J6v1Cmd39Q6qNIx48fERPT8+3z8bpdLK1s8+bVpuSNBnOSto30rKIVMWNLq6KInRY0ikVihSMKOcarbdkNnIMXnUx4JLPZmBgQKxa8bg9JuGhjGA0lrS6eQUGikWdlozdOXtPu3NGs33CscS3nXPevf8Xt2eSy5cv0dffi8XpdEjSz3V57dzGJmUZqVo/otXu0pBrMHLVcFKtCeEFXcHp+QczPzk9p/vuA9nNbSZfTDE0NCSPIr+LAadg6NZN7t+9y9TEOIp3QV57j+P2MZ3jLt3TCzr/x9l/uPjnIx8/feHz5098BYOPi8mWAFqCAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;complex interfacing example&quot;
+        title=&quot;&quot;
+        src=&quot;/static/914ad9ccb6697b97d6723481854533a6/fcda8/symmetrical-interfacing.png&quot;
+        srcset=&quot;/static/914ad9ccb6697b97d6723481854533a6/12f09/symmetrical-interfacing.png 148w,
+/static/914ad9ccb6697b97d6723481854533a6/e4a3f/symmetrical-interfacing.png 295w,
+/static/914ad9ccb6697b97d6723481854533a6/fcda8/symmetrical-interfacing.png 590w,
+/static/914ad9ccb6697b97d6723481854533a6/efc66/symmetrical-interfacing.png 885w,
+/static/914ad9ccb6697b97d6723481854533a6/bf433/symmetrical-interfacing.png 971w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Sometimes you can use things like recesses and framing that would exist naturally, like wood beams and frames, seams between concrete, to make the interfaces simple and compatible across many different parts. I tried to show in this example that if you have a repeating frame around panels, you can get away with whatever you want inside... the outer frames are doing all the work here. Notice here that the ceiling and wall are clipping into the bottom frame -- that&apos;s why it&apos;s good to have details inset by a small margin from the edge when you can.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d024234fabeedf5f381c45c51b6fcc15/f7616/uniform-interfacing.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 60.810810810810814%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAA7DAAAOwwHHb6hkAAACnUlEQVR42m2TW09TQRDHz4eitKcXKJZYQFtR7rT4gIIYYrxEgmjAKBJ9kIBBUkTKoaXl9LSnV3q/3y0RP9Pf2ZXigz5MNrs789v/zM4I/f39YGYymWC32zAxPoaRkWFYrTdhsVj4ncFggFarg0bTS6sWWp0OoihCr9fzO6PRyOP7+vogsICBgQH09Gjw4f0GLi8qyGeiSMYVBAMn8EguHOzvYGf7I7Y2N/B6bQXPni5jcWEejtlp3B29g1tcgJVzroGa3l68IedfBKxX0mg38ui0Cmg38/yRn50yLtpFdNoFNGtZ7tOsZVAtJZFNRZBMBOF0zv4FspRePH+Cy04JLQpo1bPXASy4UkyiVDhHtZxEPhdDNhNBjc7z2RjSSZX7OB0zEMwEswwOUk30eLQ4jx/NAl1muIoGAWvlNOrVP2u5yOAplPIJ5Kgs9S4wFUaGbHJiHIKBCqvTaam4Riw9XkK5RGpKKQ5oEbB1Ba3SGQPWyikUGTAdRYMeYmBm8aiMUaqnMDU9g7X1Dezuu3DiVyCdyjg9C0BRVcQSUUrtnFJN8UcYtFFN0z6BTDrMgUxZIRdHSPFiZHgYwozDiZXVNXze3cO3Yw98ioqzUBTegArJH4DbewbJJ8MfCEKNhJE4jxEsTqri/BGmrkJ1lv3H1GY3IIiiDlr6YdZT1qEhOOfu4+XqK2x/2cORxwc5FOF2GgjhmNS7PX6+eikLORiiTELI5tI4kb7zfhTMZjO6ZqIDkTUtGWtUm92OBw8XsP72Hb4eHBJEgRKOQ1aj8FMmTLlPCcN1JGFicorHCN1J6VoX3p0Q3dVUsLN798bo45axufUJrkM3V37glmjC7NyP+fwD/B+cGRsrPYGZelaeQWo1h3MOt2022ou8l1nMb+oVVhj9Vgc5AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;uniform interfacing example&quot;
+        title=&quot;&quot;
+        src=&quot;/static/d024234fabeedf5f381c45c51b6fcc15/fcda8/uniform-interfacing.png&quot;
+        srcset=&quot;/static/d024234fabeedf5f381c45c51b6fcc15/12f09/uniform-interfacing.png 148w,
+/static/d024234fabeedf5f381c45c51b6fcc15/e4a3f/uniform-interfacing.png 295w,
+/static/d024234fabeedf5f381c45c51b6fcc15/fcda8/uniform-interfacing.png 590w,
+/static/d024234fabeedf5f381c45c51b6fcc15/f7616/uniform-interfacing.png 766w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Inside corners (left side) generally need to be their own part: because of the wall offset, the inside corner overlaps itself on a full-width wall.&lt;/p&gt;
+&lt;p&gt;Similarly, outside corners (right side) need bevels/caps because the wall thickness offset creates a gap. Here&apos;s what happens when you just line up walls together, it&apos;s gross:&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/8db704e7112b5647dd258e85f4e9b427/7e509/bad-interfacing.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 72.2972972972973%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACx0lEQVR42n2TWU+aURCG+VMqAop7vNPUQFFuNKkmxhiVNPW6aWur1DZNaWtiGlKrrB8IsoOgIsiH7IuAv+btzKm02pheTM6SM8+8sxyFVquFWq1GT0+PsJGREeh0OlpHoVQq0dfXh/7+fgwODmJoaOiPsV935TcajUacFXwxNTWFtfU1fP1iQTQSQjgSwXfrAczvP2B93QTD7CzGxscpsArKuwBaCsABWczy8jKmp6dpr4FicnISsVgUjXoV5XIRhes8AqEQnG4PvL4TBMNReI79+PHTht2Pn7Bheo65OSNGR8ewMD8Ph/0IdfJdXHwmlCo4NckjQZazyGbSZJfwB0I4sjvJHLA7XXBJXrg9XgH2B8MUJIaXr14jTkKajTrOUkno9U+hUqmg4Ny/7e2hVLyGfJVBOp0WQLvTDbvDBYdLEkA+H9ocODg8guT14d22GR4Scp3PIR6PiZSZpejt7cWbrS2RrpzLIHV2jlAkBg85Mczhcgt1vGeojYJwKbZ3zPD7faiQn993LJqjUd8BX2xuolarUtpXyGSySF1kkUilEYomcOwPkEIP1VQSMC6FRKnvmHcRDAZQpsySyVOsrKxgYmICCu6STq+HJLkJWkOj0UChUEA2JyOdkZE8zyJ+ekGN4uacwEXN4hK83d5BhCaCM6tUK2g2m6JcYmwGBgbEDK2urooGNZsNtNstelyCnKfa5gvIkWWyOSS5JOEIbNSwy/QFqgSrVH4bixFANh5cHmxWvLS0BIfDTuNQx+1tBzVyKpWKwpmz4LVJzrzvwthKpdJfINvw8LBQyvOkUqmxsDAPq9UqlLbbbeFULBboXH4A6sJYwAPgY2D+DUajEfv7+0Jlp9MhhVUBuA+7ublBIpF4HPgvmKE8DXpqnsVioWmQ0Wq1BIzVcup8ZzAY/g+8D2bjweV/PDPzhMCfhdIu0GTaEF/vF+1W37tyu+fKAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;bad interfacing&quot;
+        title=&quot;&quot;
+        src=&quot;/static/8db704e7112b5647dd258e85f4e9b427/fcda8/bad-interfacing.png&quot;
+        srcset=&quot;/static/8db704e7112b5647dd258e85f4e9b427/12f09/bad-interfacing.png 148w,
+/static/8db704e7112b5647dd258e85f4e9b427/e4a3f/bad-interfacing.png 295w,
+/static/8db704e7112b5647dd258e85f4e9b427/fcda8/bad-interfacing.png 590w,
+/static/8db704e7112b5647dd258e85f4e9b427/7e509/bad-interfacing.png 745w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The solution is to combine the walls together as cleanly joined inner corner and outer corner parts, like in a 2D tilemap.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/aa7a55883f7284f87a7f8320ead3e0a0/98314/cleaned-interfacing.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAYAAADkmO9VAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC5UlEQVR42o2T208aQRTG+acKC8hFqqYNiYptTDX6QppoNW3aSBv70r5B0qTVpNWkia2XRITdBcTlJgFx5Sqwyy1YxT/m65klVE1M7MNhZpid33fmO2d0NpsNg7Db7bAPD8NitfbnFLf3/yd07MdKYR4agt5gAEfhsNPaZISB5iazGVar5V4BtjbTPkvgDtBOf4w7n+Ld8iJ+fl+Hf3cbX3xerLx5jRfPpzAy8hgmk0kTMNPIAAyk1+vhmpzE2NgYLBZLH2jkOHxe/YBaqQC1XkW73UQ6c4JIVEJUiiMajmDvNwl8XcOK5z1mZmYJMEqgCaytf0OJzs3OzsBoNGoZ65jKp4+rUJU6CoUzFAt5SLEE9g+CFDz4II9IKIQwCUQOJYiRI+xt/0JSCpN4C2fyKcbHJ7SMNSBH5Fcv3SgX86iUiwTN40iK4YBA/qAAgUaRF7Af4EkggP2giPhhCNlUnL4vIZVMwOl0wkY2DFNBdcz0F1Mu5E6yqFRKkE9zSMXoqqEwggRiGYZ4Hge82BfhQ7THI5OSUK/XIPBBzV+OM1DxyENm5pPRUcjpFDpqDZUzma6RJwEZ6eQx4uEwIqKIgBBCINgHSxEB2XQCtWoFMl3Z6/Vibm5OK55WZZbu26VFSEeH6F5cUHRRrZOnpXPI+TKyuTySxxkqVAxBMYKo6MdJ5pgyrKPVauHq6gqdTgcJur5u0D+PqCVYtstLSxAFAR0y/A+BFVVBjQ4qikqjgkKxhHI+h3r1HI1GEw21QQVVaN7A5eXlDZAZyqrEys/WCwuL8Pv9aDabuCCwSmCFOoGtWVbNZkODsFAI2O12EY1Gb4CDzr8NZq3gdruxs7vz75CqqtpV2TiAtdtt8lKGy+W6C7wdAzCrIIv5+XlsbW1pkOvetQZh4H7GTU2Yo0eie+ixMzCLfmtwmJ6exsaPDVTJw16vp/nm8Xi0Z+hwOB4G3gc2mg2YeubC5uYmfD6fJsT22Fv+Czh44mRAuECqAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;cleaned interfacing&quot;
+        title=&quot;&quot;
+        src=&quot;/static/aa7a55883f7284f87a7f8320ead3e0a0/fcda8/cleaned-interfacing.png&quot;
+        srcset=&quot;/static/aa7a55883f7284f87a7f8320ead3e0a0/12f09/cleaned-interfacing.png 148w,
+/static/aa7a55883f7284f87a7f8320ead3e0a0/e4a3f/cleaned-interfacing.png 295w,
+/static/aa7a55883f7284f87a7f8320ead3e0a0/fcda8/cleaned-interfacing.png 590w,
+/static/aa7a55883f7284f87a7f8320ead3e0a0/98314/cleaned-interfacing.png 817w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;Pivot-and-flange&lt;/h2&gt;
+&lt;p&gt;Pillar, archway, etc disguises bad interfaces, it&apos;s an easy hack. Most useful for odd angles, for 90 or 45 degree angles it&apos;s generally better to make a bevel part.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c4a3671d64bb53fe1f06ab6be82138a2/9128f/bad-gap.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 94.5945945945946%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAACXBIWXMAAA7DAAAOwwHHb6hkAAACsklEQVR42q2S2WsTURjF56/SJm32igo2Klp9Ei0iGIQqLi++lILUBxGUQlGE2iRNOpkmTdo06yzZZkmTSaZ113/m+M1NUtKa1Ao+HIZ778zvnO/M5TweD6amXPB6fZgOBBDw++Hvy+fzjZV/6L1hccGZS7g7dxuBgB8OhxMul5sd2Gu/fzxsnBH3cP4B2oaCzUQYiwvPcfPGdbjdHga30/fggSMpTkrOvVxahGU20DKq6LYbqFfyCK++w7OnjxAMzrA6nM5JgnsP09kGPZPAn8CrV4LI72ygrmQJVoChK+gQ2NyrQipmsLL8GqH793Dxwnn2weTkFM6cPYsJh4OZ2dN4vbZZz4ibnb0GtVZGo5pHRUyjImVYSq0hYs+osNRNTYJUyiBJtbxfeYOlFwt48ngec3du4TJNcW56Gl6fG07XBLhQKIRCVsCeLkNXZQIXCJxBpZwmcI6Ba9Ui7Zfw46vJ9PNbB18ODDKrM7NSPoV47AOW374CtxqJI7IeQ343iZqchaGK0DWFUpcYuCZvY2crhmwmgU+WDrNVp0pUWB0N+10dB5ZB8Ca+fzbxi4y46IaACCkcT4AXeBQIXK/YYAkGgXVKKBVTUMpbdBtEtPQyPSWYTeq6VYVFlVimeiguspHAQDY0QhI2EyjmbPAuQSWodREN6nm/o9LPqhBMRlsnuFYmlXpPWpuGfBQ40FofnEwmIFI6ubxNPYo0noZuf9T9ji2NXbluq8YS28lHAofBUT6BzSQPRcqykTuUzmrbo9bYiDaUqWvggIxOBA5XEeUFCKkktrNplIqUWMmh2SgyE6ul9E3qpwMOoGtxHh9jPNZI9l5cEJBKp7Cby0Aq79DNyJ8eOFD0uEmsZxKm9TrVw/0rJDribHiPi4x54bhGfXz8jAGjY1KMShX9i+Eh8H/qN2QyHG7JcGzoAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;bad gap&quot;
+        title=&quot;&quot;
+        src=&quot;/static/c4a3671d64bb53fe1f06ab6be82138a2/fcda8/bad-gap.png&quot;
+        srcset=&quot;/static/c4a3671d64bb53fe1f06ab6be82138a2/12f09/bad-gap.png 148w,
+/static/c4a3671d64bb53fe1f06ab6be82138a2/e4a3f/bad-gap.png 295w,
+/static/c4a3671d64bb53fe1f06ab6be82138a2/fcda8/bad-gap.png 590w,
+/static/c4a3671d64bb53fe1f06ab6be82138a2/9128f/bad-gap.png 603w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 590px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/85b8ab1f2a218110f5520365b361bf05/bce72/pivot-and-flange.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 83.1081081081081%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAYAAADdRIy+AAAACXBIWXMAAA7DAAAOwwHHb6hkAAACsklEQVR42o2SSVMTURSF+1eRkHQCSYeFEEALrcLCBZZuVRbK0o2WZblgxWihEAKdOYGEytR0ks7UGToTgop/5njfk0SKIsDi1H3jd+677wpOpwNjY2Mwmc0QbTY4nU5IksSjw+EYxGFi+32xueByubC+toJPH9/jyeM5DrdaRYyPOzAx4QLbZwbSZbzLQFhYmIdR19Axyijmk/DsbODd2zeYnZmGKNpgs9n5wXEyYnFgMAQuzNDFkH8HFS0NvaKi26pwuJqNY2N1BS9fLGLKPY35pwtwT8/CYrXCKoqw2/sGEpckubgEs3kU219XoZfSUDMRFNQEysUs6noBvXYFWiEF2e9D+DCOYDiMpaVXmHv0EJOTDwhqx8iICSaTGaMWC0S7BcKU242A/B2tRhFlLcOB+WyMYpzmaYIrKBH0tF1Gr1XC+WkN7aaGnJJALCJj59s6vnz+gOXl13i++AzC2tY2Nrc2oaRjKBeS/NmVkgItd8zBajaK3EmCsi3xUjD12lWcndbx+9zAn19tXPw0+Pi8V4Pg9YewHwhjTw4gEgkQOEr1THEwk5o9QiYVwVm3Sp+XR1NXeWw1NLSaRVKJMi4PJHhkP4ft+YLwyEF4fQFEowGcZKKoFlMoU7aFXBI/OlV06KlN/QSNahaNClOGR7Zm1HJok4mw52Owqwpil8D7ND46DEKh7FQlzjPstujJ9NwuqcPGRokyLXBYU1c4/Abgf3kYfP8AqWQUF2cN9Azq10YeXaPI4azFutxAp7rqfH4rkGn3wI944giNmgZVTRP8kDrgmLeZQVm16zkyKAxM7gTyTOVLONWbGbCyyMEQQtEwEscxKJk4itQhdarpvYBMXn/wUgH+cX2j3YN/ke35QqH7Azl0yNpVA+H6Ye+1g95rl7w3wK6uCcMu3Qb03gL8CygntTHLBLyjAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;pivot and flange&quot;
+        title=&quot;&quot;
+        src=&quot;/static/85b8ab1f2a218110f5520365b361bf05/fcda8/pivot-and-flange.png&quot;
+        srcset=&quot;/static/85b8ab1f2a218110f5520365b361bf05/12f09/pivot-and-flange.png 148w,
+/static/85b8ab1f2a218110f5520365b361bf05/e4a3f/pivot-and-flange.png 295w,
+/static/85b8ab1f2a218110f5520365b361bf05/fcda8/pivot-and-flange.png 590w,
+/static/85b8ab1f2a218110f5520365b361bf05/bce72/pivot-and-flange.png 633w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;You can also do this trick to cover up inner/outer corners in a combination of walls that don&apos;t have corner parts built.&lt;/p&gt;
+&lt;h2&gt;Texture concerns&lt;/h2&gt;
+&lt;p&gt;Texel density is the resolution of textures in space. It&apos;s usually expressed in pixels per meter (or per cm).&lt;/p&gt;
+&lt;p&gt;For example, in a game with a 512 px/m texture density, a 1m square wall panel should use a 512x512 pixel square texture.&lt;/p&gt;
+&lt;p&gt;Why does it matter? If you have different texel densities, you&apos;ll get a weird effect where some objects look sharp and others look blurry even when they&apos;re side by side. The goal is to have a mostly uniform texel density. It&apos;s okay if it has maybe 25% variation, allowing you to do minor scaling, but if you scale objects more than that their texel density differences will make them look bad.&lt;/p&gt;
+&lt;p&gt;For this system, let&apos;s say a 2k texture should be standard for a part like a 3m square wall part. So our texel density could be 2048px/3m = &lt;strong&gt;682.66 px/m&lt;/strong&gt;. It&apos;s not a whole number bc the 3m footprint, but since usually we&apos;d think of it like &quot;a typical wall/floor/ceiling should use a 2k texture&quot;, that seems fine.&lt;/p&gt;
+&lt;p&gt;Texel density helps different objects look consistent with each other, but it is also important to be consistent on different sections of a single object. It looks bad if some areas look stretched out or blurry, especially against others that are sharp and undistorted.&lt;/p&gt;
+&lt;p&gt;Don&apos;t be too conservative in your texel density choice, you can always downsample textures easily. Unity lets you choose a lower resolution on the asset properties panel. But upsampling is labor-intensive.&lt;/p&gt;
+&lt;p&gt;To learn more, Timothy Dries has written a good article &lt;a href=&quot;https://www.beyondextent.com/deep-dives/deepdive-texeldensity&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Blender has a helpful &lt;a href=&quot;https://extensions.blender.org/add-ons/texel-density-checker/&quot;&gt;Texel Density Checker&lt;/a&gt; plugin.&lt;/p&gt;
+&lt;p&gt;Textures that are meant to tile across kit pieces can take advantage of the footprint system by having the UV grid correspond to the footprint dimensions.&lt;/p&gt;
+&lt;p&gt;Objects that are close up to the character, like hands or weapons, often have a higher texel density than anything else because they are closer to the camera and larger on the screen.&lt;/p&gt;
+&lt;h2&gt;Kit hierarchy&lt;/h2&gt;
+&lt;p&gt;These are my terms, I&apos;m attempting to name things I saw in the Fallout 4 GDC talk where they shared some learnings about making kit pieces more mix-and-match-able.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Template Proofs&lt;/strong&gt; These are featureless or nearly-featureless objects useful to build atoms. For example, a standard doorway block-ins. These are just helpful tools for 3D artists to get started on kit pieces faster because there&apos;s minimal geometry and correct dimensions. They can be exported as a &lt;strong&gt;&quot;proof kit&quot;&lt;/strong&gt; so that level designers can give 3D artists early feedback about whether the big ideas of the kit are working.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Atoms&lt;/strong&gt; are not exported to the game editor, they&apos;re only in used 3D modeling software to compose parts. They&apos;re too tiny to be useful to a level designer, it would be a lot of work to assemble them into something. Atoms could include door handles, wall ornamentation, a part of a window that is reused, etc. It can be a good idea to put them in a library for the convenience of the 3D artists, but be careful changing them, it&apos;s always safer to duplicate.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Molecules&lt;/strong&gt; are the smallest parts that are exported to the game editor. They&apos;re a bit big enough to be useful to a level designer. The chemistry metaphor isn&apos;t perfect -- molecules here are not necessarily made up of atoms, they can be made from scratch.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Compounds&lt;/strong&gt; Molecules arranged together in a way that is useful. For example, if you have an arrangement of a floor, trim, wall, and column that fit together in a way that makes sense to repeat, you can group it as a compound. In Unity, compounds are probably best arranged as Prefabs that compose other &quot;molecule&quot; Prefabs.&lt;/p&gt;
+&lt;p&gt;For the exported pieces, a good rule is to make big objects less granular than small ones. For example, a kit for building a city can have pieces that are whole facades or entire buildings. A kit for building a hallway can have small wall panels and individual doors. If it&apos;s too granular, it&apos;s tedious to work with in the Editor.&lt;/p&gt;
+&lt;h2&gt;Local grids&lt;/h2&gt;
+&lt;p&gt;You can get a lot of variety in a level by having multiple grids to place footprints on. In a game editor, you can make a tunnel or street turn at an irregular angle by having local grids that aren&apos;t aligned to global XYZ.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 580px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9ccf8480469f9ff0668bae153a751051/b6272/local-grids.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 83.1081081081081%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAA9hAAAPYQGoP6dpAAABvklEQVR42qWTTY+bMBCG85f7l3KNIuXQU4+rVVu1CrsJHzYQ8tGoK6G0IrA12IMxfWPvZkm62x76isNg/Mw7Yw+j/lLGmP41vbo6+idsnsnHrvuhtfkTdkye50VRnF/PGBnzvW25UhHR4/Ona3g6nU4mk2GdXd//1DolipTiREypTdt2Q2dHEtFsNhuPx03TuMVfxmBrZA1jS8aIlTpo7bI/wVVV1XVdlqULjlW1q2tfiKBpUC2eEwmeiNtEZP1OsBCCcx5FURiGnufFjHlRdLPdfjkcFmUZSondjnekr9RD2z7BsFpZxXEcBEG2Xmer1ack+Zzn98cjk5I5mChQKlTqW9vKszPgzCpNU5ivrSLGPu52XlGETeOcE6I9UdN1ZnhggFEzPJfL5Xw+P8Vh6C8Wt3d3N/s9lxKGW6IPSr0neui6i6sCnFgxxsDDHzFKQLLbNL0XYofjNWah9TshvtpuuyE8LHuz2SBG/wnnYZoe6toVWRmTaC2uhgSw6xMwagaMGDCuYJ1lUsrhbF+PpzttkAB833cxWkAiBI2Fh9N6ASO3axi70TO3Qv1IhHWlVP+GRv1/6OXHeEt/gX8Dj7rAdJc8w7QAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;local grids&quot;
+        title=&quot;&quot;
+        src=&quot;/static/9ccf8480469f9ff0668bae153a751051/b6272/local-grids.png&quot;
+        srcset=&quot;/static/9ccf8480469f9ff0668bae153a751051/12f09/local-grids.png 148w,
+/static/9ccf8480469f9ff0668bae153a751051/e4a3f/local-grids.png 295w,
+/static/9ccf8480469f9ff0668bae153a751051/b6272/local-grids.png 580w&quot;
+        sizes=&quot;(max-width: 580px) 100vw, 580px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;An easy way to do this in Unity without plugins is by aligning a set of pieces to the world grid, building up your street or whatever it is, parenting the whole section under an Empty, and then rotating the empty.&lt;/p&gt;
+&lt;p&gt;This often introduces an irregular gap, which you can fill/cover by variations of the pivot-and-flange method.&lt;/p&gt;
+&lt;h2&gt;WIP: Naming Parts&lt;/h2&gt;
+&lt;p&gt;The resources I&apos;ve found highlight the importance and difficulty of naming things. Potentially, the name itself could be parsed into a game editor plugin to allow designers to filter and find matching. But even without such a system, it&apos;s still hard to find things in a complex kit without a good name.&lt;/p&gt;
+&lt;p&gt;Maybe something like this? &lt;code&gt;[Kit Name].[Subkit Name].[Type].[UniqueDescriptionOrLetter].[VersionNumber].[L/R if mirrored]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;For example, &lt;code&gt;Village.FancyHouse.InnerCorner.OakFrameStucco.B.0&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&quot;CornerIn&quot; is an inside corner, the corner of a room. &quot;CornerOut&quot; is an outside corner that goes the other way, like on the outside of a building.&lt;/li&gt;
+&lt;li&gt;&quot;BevelFull&quot; &quot;BevelHalf&quot;&lt;/li&gt;
+&lt;li&gt;Use letters not numbers, except for versions if you need to do versioning.&lt;/li&gt;
+&lt;li&gt;Kit and subkit examples. Remember the Fallout 4 lesson that &quot;Utility hallway&quot; was really just useful for its pipes, if the walls are the same just make a pipe kit.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1&gt;Resources&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.joelburgess.com/2013/04/skyrims-modular-level-design-gdc-2013.html&quot;&gt;Skyrim’s Modular Approach to Level Design&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.joelburgess.com/2014/07/gdc-2014-transcript-iterative-level.html&quot;&gt;The Iterative Level Design Process Used to Ship Fallout 3 and Skyrim&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://gdcvault.com/play/1023202/-Fallout-4-s-Modular&quot;&gt;The Modular Level Design of Fallout 4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=77xPHfzciiY&quot;&gt;Beyond Extent - Modular Kits for Game Environments w/ Jon Arellano&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h1&gt;Appendix&lt;/h1&gt;
+&lt;p&gt;This is the end of the actual article, below is just unpolished notes.&lt;/p&gt;
+&lt;h2&gt;My notes from &quot;Skyrim&apos;s Modular Level Design&quot; talk&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Repeated detail elements bother players. Repeated architecture is more forgivable.&lt;/li&gt;
+&lt;li&gt;You can kitbash your own kits together in combinations that aren&apos;t intended for interesting environments&lt;/li&gt;
+&lt;li&gt;You have to be carefully making changes to a kit, because it has wide effects across the instances&lt;/li&gt;
+&lt;li&gt;For normal doors, standardize the dimensions. Then you can mix and match doors, reuse logic etc&lt;/li&gt;
+&lt;li&gt;Also figure out the minimum traversable width of the player (and double it) for the narrowest sections&lt;/li&gt;
+&lt;li&gt;Know what the max traversable incline is (and if it&apos;s too high and looks weird)&lt;/li&gt;
+&lt;li&gt;Know any other gameplay-related dimensions: for a platformer, how far can you jump? For a shooter, how high a fence can you shoot over, how low a barricade can you take cover under?&lt;/li&gt;
+&lt;li&gt;Kits can be organized into sub-kits, like &quot;Small Room&quot;, &quot;Small Hallway&quot;.&lt;/li&gt;
+&lt;li&gt;Begin with greyboxing the kit.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;What is the visual theme of the kit? How is it different from other areas in the game? What kinds of spaces do you want to build with it?  How will be it be used?  How often will it be used? Some of these answers will be driven by design, others by art - it&apos;s important that both voices are being represented from the very beginning. [...] How widely-used will the kit be?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We get our kits to a &quot;functional-but-ugly&quot;&quot; state as soon as possible.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Proof pieces&lt;/strong&gt; have almost no mesh detail and usually no textures at all. Instead, we&apos;ll be playing with proportions, kit logic, naming conventions, and other basic needs. Because of that, this stage of the process is also relatively quick, often only 1-3 weeks, depending on the scope of the kit, and how many failed iterations of the proof pieces end up being created and disposed of.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If you want to build an asymmetrical cave kit, start building obvious asymmetry into the graybox pieces. If you make your graybox too generic, you do not actually solve any problems.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Stress testing: level designers (and artists making the kit) try matching up the pieces and see if they work together in different configurations.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Loop the kit back on itself. A flawed design might not re-align with itself if you make a hallway or wall loop.&lt;/li&gt;
+&lt;li&gt;Stack it on top of each other. Does it overlap itself?&lt;/li&gt;
+&lt;li&gt;Try making pillars out of things that aren&apos;t meant to be pillars.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Avoid attempting to create a kit which tiles on all axes.  Hallways kits tend to tile on only one axis, while rooms typically tile on two.  An all-axis tiling kit is able to create spaces which stretch out not only horizontally, but also vertically stack and tile on themselves.  This kind of kit allows a great deal of building freedom, but is very complex to build and use.  When vertical tiling is desired, it&apos;s generally wiser to build a separate sub-kit with a fixed horizontal plane size.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;Unfinished weird ideas&lt;/h2&gt;
+&lt;h3&gt;Non-cuboidal footprint&lt;/h3&gt;
+&lt;p&gt;What if you want to build a really geometrically unusual environment where there is no constant gravity, where you want to fully and equally use multiple planes as &quot;the ground&quot;, and lose the distinction between walls versus ceilings versus floors? Typical kits are very unidirectional with a clear up and down.&lt;/p&gt;
+&lt;p&gt;Normally, kits use cubes or rectangular prisms as the footprint. These shapes work well because cubes and rectangular prisms are a space-filling geometry. In other words, cubes tesselate in a 3D space and leave no gaps.&lt;/p&gt;
+&lt;p&gt;Another convenient feature of the cube is that it tesselates without rotation. Some space-filling 3D shapes need to be rotated in complex ways, which would make them difficult to use.&lt;/p&gt;
+&lt;p&gt;Some shapes are not space-filling on their own, but in combination with other shapes can fill space. That might be okay, if it&apos;s not too intricate a pattern.&lt;/p&gt;
+&lt;p&gt;Cubes are familiar to us, most rooms are shaped like a box and fit into cube shapes. So we don&apos;t want a system based on a footprint that is incompatible with a cube. What can coexist with cubes, is space filling, and doesn&apos;t require complex rotations to match up?&lt;/p&gt;
+&lt;p&gt;Any 2D tesselation can be extruded to make a 3D tesselation. But these all have the same problem: they end up being flat on the &quot;top&quot;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A triangular prism (extruded triangle, ie cube cut in half diagonally on one axis) can interface with a cube on its rectangular sides and is space-filling without rotation. This would be a promising one but it&apos;s very acute and makes sharp corners, and is so similar to a cube that it doesn&apos;t give us much new geometry.&lt;/li&gt;
+&lt;li&gt;A hexagonal prism is more interesting. It gives us roomy corners, and its square sides easily interface&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Parallelipeds are sort of a lopsided cube, a square is to a parallelogram as a cube is to a paralleliped. It tesselates just like a cube, but with two opposite faces tilted at some angle. It doesn&apos;t get us very far, we&apos;ve just tilted one axis (linear transformation).&lt;/p&gt;
+&lt;p&gt;Octahedrons (or in RPG dice terms, d8) and tetrahedrons (d4) can tesselate. This can make a collection of interesting shapes. However, equilateral triangle faces are too acute for the basis of a footprint system.&lt;/p&gt;
+&lt;p&gt;A truncated octohedron seems interesting because I think it aligns with the normals of a cube and of a tetrahedron / octahedron.&lt;/p&gt;
+&lt;p&gt;For special cases, a truncated icosahedron is interesting, or other &lt;a href=&quot;https://en.wikipedia.org/wiki/Goldberg_polyhedron&quot;&gt;Goldberg polyhedrons&lt;/a&gt;. Hexagons and pentagons are nice face shapes. I think there&apos;s some directionality to them which might be constraining, eg the dihedral angle of a truncated icosahedron between adjacent hexagonal faces is ~138.18°, and pentagon to hexagon dihedral is about 142.6°. That is just a few degrees though, so maybe it wouldn&apos;t enforce an even-odd edge pattern to the hexagons. And maybe an even-odd edge pattern would look cool.&lt;/p&gt;
+&lt;h3&gt;Deep Space Hallucinations&lt;/h3&gt;
+&lt;p&gt;It is interesting to think about crystal structures, &lt;a href=&quot;https://en.wikipedia.org/wiki/Space_frame&quot;&gt;space frames&lt;/a&gt;, &lt;a href=&quot;https://en.wikipedia.org/wiki/Honeycomb_%28geometry%29&quot;&gt;3D honeycombs&lt;/a&gt; that tesselate space, &lt;a href=&quot;https://en.wikipedia.org/wiki/Point_groups_in_three_dimensions&quot;&gt;point groups&lt;/a&gt;, the &lt;a href=&quot;https://en.wikipedia.org/wiki/Wallpaper_group&quot;&gt;17 wallpaper groups&lt;/a&gt; , and finding the perfect set of angles that make a flexible kit that doesn&apos;t tend to orthogonality even in the vertical axis. But in pursuit of this geometry, you can end up in outer space.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://geometryofthinking.com/2023/08/05/tensegrity/&quot;&gt;Geometry of Thinking&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&quot;All structures, properly understood, from the solar system to the atom, are tensegrity structures. &lt;strong&gt;Universe is omnitensional integrity&lt;/strong&gt;&quot;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;—R. Buckminster Fuller, Synergetics, 700.04&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&quot;Tensegrity&quot; is a portmanteau of tension and integrity. It refers to standalone structures that would have &lt;strong&gt;as much integrity in the vacuum of space as on the earth’s surface&lt;/strong&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;https://en.wikipedia.org/wiki/Wallpaper_group#/media/File:Wallpaper_group-p2-3.jpg&quot; alt=&quot;A ceiling of an Egyptian tomb&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Wallpaper group &lt;code&gt;p2&lt;/code&gt;, a ceiling of an Egyptian tomb&lt;/p&gt;
+&lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Escape the algorithmic enshittification of the web]]></title><description><![CDATA[Thoughts on more intentional online existence]]></description><link>https://ianlondon.github.io/posts/escape-the-enshittification-of-the-web</link><guid isPermaLink="false">escape-the-enshittification-of-the-web</guid><pubDate>Thu, 01 Feb 2024 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/e939ef95313dca6cac17ccde145b840b/2244e/wildflowers.jpg&quot; /&gt;&lt;h1&gt;The State of Our Online Attention&lt;/h1&gt;
 &lt;p&gt;I have spent many, many, many unsatisfying hours scrolling on various social media feeds, and I don&apos;t want to do it any more. But it&apos;s hard to stop. The infinite scroll, whether it&apos;s the relatively mild vertical scroll or the overstimulating TikTok/stories/shorts scroll, siphons your attention into a frustratingly narrow space, taking away your ability to scan and filter. It is very much like a slot machine, mostly disappointment with a few glimmers of hope when you find something you actually enjoy, hinting at further enjoyment later. You only have two choices within the scroll: keep scrolling, or scroll faster. It works because it makes you forget that other options and modes of interaction exist. Just scroll. All this time adds up, and it costs you a chunk of your life.&lt;/p&gt;
 &lt;p&gt;Perhaps you and your friends have commiserated about the enshittification of search: googling isn&apos;t what it used to be. To find what we&apos;re looking for we share tricks like adding the word &quot;reddit&quot; at the end of our searches, because the broader internet is filled with spam. We&apos;ve lost something important. Generative &quot;AI&quot; is flooding our searches with even more garbage: the same listicles over and over, carelessly written summaries of copies of copies.&lt;/p&gt;
 &lt;p&gt;I follow a ton of artists in the classical realism scene, and a large fraction of their posts are of them protesting against Instagram censoring their figurative work. Every once in a while, there is a new flurry of complaint when they see their viewership drop off due to some silent and unknowable change to the Algorithm. This is a deep threat to their livelihood, and it&apos;s out of their control. It&apos;s obvious to everyone that this platform is feeding off of their work, but it doesn&apos;t seem like there&apos;s any alternative.&lt;/p&gt;
