@@ -87,6 +87,9 @@ const config: GatsbyConfig = {
       options: {
         plugins: [
           {
+            resolve: "gatsby-remark-copy-linked-files",
+          },
+          {
             resolve: "gatsby-remark-images",
             options: {
               // It's important to specify the maxWidth (in pixels) of
