@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Ian London's Blog: RSS Feed]]></title><description><![CDATA[A blog of software and other projects]]></description><link>https://ianlondon.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 14 Aug 2025 23:16:38 GMT</lastBuildDate><item><title><![CDATA[Modular Level Kit Design Considerations]]></title><description><![CDATA[A guide to laying out a level building kit for 3D games]]></description><link>https://ianlondon.github.io/posts/modular-level-kit-geometry</link><guid isPermaLink="false">modular-level-kit-geometry</guid><pubDate>Thu, 14 Aug 2025 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/45f823fda64ba107b47b26bf8d6fc22f/497c6/footprint-dimensions.png&quot; /&gt;&lt;h1&gt;Modular level kits for 3D games&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Ian London's Blog: RSS Feed]]></title><description><![CDATA[A blog of software and other projects]]></description><link>https://ianlondon.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 15 Aug 2025 02:24:45 GMT</lastBuildDate><item><title><![CDATA[Modular Level Kit Design Considerations]]></title><description><![CDATA[A guide to laying out a level building kit for 3D games]]></description><link>https://ianlondon.github.io/posts/modular-level-kit-geometry</link><guid isPermaLink="false">modular-level-kit-geometry</guid><pubDate>Thu, 14 Aug 2025 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/45f823fda64ba107b47b26bf8d6fc22f/497c6/footprint-dimensions.png&quot; /&gt;&lt;h1&gt;Modular level kits for 3D games&lt;/h1&gt;
 &lt;p&gt;When building 3D games, it&apos;s standard practice to have an art team make 3D models and hand those models off to level designers to arrange inside a game engine. With a well-designed kit, level designers can snap together pieces like Legos and build interesting levels without needing every part of the level custom-built and inflexible.&lt;/p&gt;
 &lt;p&gt;This is a difficult task. Graciously, several experienced game industry professionals have shared some helpful resources which I&apos;ve borrowed from. I&apos;ve listed my sources below in the Resources section.&lt;/p&gt;
 &lt;p&gt;There isn&apos;t much out there about the fine details of how to go about building a level kit, so hopefully this article will be helpful.&lt;/p&gt;
@@ -687,7 +687,36 @@
 &lt;blockquote&gt;
 &lt;p&gt;&quot;Tensegrity&quot; is a portmanteau of tension and integrity. It refers to standalone structures that would have &lt;strong&gt;as much integrity in the vacuum of space as on the earth’s surface&lt;/strong&gt;.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&quot;https://en.wikipedia.org/wiki/Wallpaper_group#/media/File:Wallpaper_group-p2-3.jpg&quot; alt=&quot;A ceiling of an Egyptian tomb&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 500px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/d39339b36daa8fd4993a9e5334f15319/41099/egyptian-tomb-group-p2-3.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 99.32432432432432%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAUABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAEC/8QAGAEAAgMAAAAAAAAAAAAAAAAAAAQBAgP/2gAMAwEAAhADEAAAAdhZmAnQ1pQH/8QAFxABAAMAAAAAAAAAAAAAAAAAAQAgMf/aAAgBAQABBQK5DP/EABQRAQAAAAAAAAAAAAAAAAAAACD/2gAIAQMBAT8BH//EABcRAAMBAAAAAAAAAAAAAAAAAAARYRD/2gAIAQIBAT8BdHd//8QAFxAAAwEAAAAAAAAAAAAAAAAAABBBgf/aAAgBAQAGPwJRwwxf/8QAHxAAAgIBBAMAAAAAAAAAAAAAABEBgfAxQdHhIVGh/9oACAEBAAE/Id6yjjKGtYsb1lHrMga5C0t0QcxbohCeG/h//9oADAMBAAIAAwAAABDLIAD/xAAXEQADAQAAAAAAAAAAAAAAAAAAEWEQ/9oACAEDAQE/EFBTGf/EABcRAAMBAAAAAAAAAAAAAAAAAAAR8BD/2gAIAQIBAT8QpFLf/8QAHxABAAIDAAEFAAAAAAAAAAAAARExACFhUUGBodHw/9oACAEBAAE/EE49TuuVgYSYLMNcrAQS5JhGuGqyfILO65iWRo1On4xOIkkmHXDmIkefy5zBmLv2fpzJAiAYSaUcz//Z&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;A ceiling of an Egyptian tomb&quot;
+        title=&quot;&quot;
+        src=&quot;/static/d39339b36daa8fd4993a9e5334f15319/41099/egyptian-tomb-group-p2-3.jpg&quot;
+        srcset=&quot;/static/d39339b36daa8fd4993a9e5334f15319/a80bd/egyptian-tomb-group-p2-3.jpg 148w,
+/static/d39339b36daa8fd4993a9e5334f15319/1c91a/egyptian-tomb-group-p2-3.jpg 295w,
+/static/d39339b36daa8fd4993a9e5334f15319/41099/egyptian-tomb-group-p2-3.jpg 500w&quot;
+        sizes=&quot;(max-width: 500px) 100vw, 500px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Wallpaper group &lt;code&gt;p2&lt;/code&gt;, a ceiling of an Egyptian tomb&lt;/p&gt;
 &lt;/blockquote&gt;</content:encoded></item><item><title><![CDATA[Escape the algorithmic enshittification of the web]]></title><description><![CDATA[Thoughts on more intentional online existence]]></description><link>https://ianlondon.github.io/posts/escape-the-enshittification-of-the-web</link><guid isPermaLink="false">escape-the-enshittification-of-the-web</guid><pubDate>Thu, 01 Feb 2024 00:00:00 GMT</pubDate><content:encoded>&lt;img src=&quot;https://ianlondon.github.io/static/e939ef95313dca6cac17ccde145b840b/2244e/wildflowers.jpg&quot; /&gt;&lt;h1&gt;The State of Our Online Attention&lt;/h1&gt;
