@@ -310,6 +310,6 @@ It is interesting to think about crystal structures, [space frames](https://en.w
 
 > "Tensegrity" is a portmanteau of tension and integrity. It refers to standalone structures that would have **as much integrity in the vacuum of space as on the earth’s surface**.
 
-![A ceiling of an Egyptian tomb](https://en.wikipedia.org/wiki/Wallpaper_group#/media/File:Wallpaper_group-p2-3.jpg)
+![A ceiling of an Egyptian tomb](../images/modular-design-geometry/egyptian-tomb-group-p2-3.jpg)
 
 > Wallpaper group `p2`, a ceiling of an Egyptian tomb
